@@ -1,0 +1,629 @@
+<!DOCTYPE html>
+<html lang="zh-Hans">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 5.4.2">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" integrity="sha256-CTSx/A06dm1B063156EVh15m6Y67pAjZZaQc89LLSrU=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"www.grepcode.cn","root":"/","images":"/images","scheme":"Gemini","darkmode":false,"version":"8.18.2","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":{"enable":false,"style":null},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}","hits_time":"${hits} results found in ${time} ms","hits":"${hits} results found"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="参考资料 官方文档-安装 kubevirt-101  环境说明   主机名 IP OS role    c12 192.168.1.112 CentOS-7 master   c13 192.168.1.113 CentOS-7 node   c14 192.168.1.114 CentOS-7 node    kubevirt: v0.49.0   安装文档KubeVirt 是 Kubernet">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Kubevirt实战&#x2F;环境搭建与测试项目">
+<meta property="og:url" content="https://www.grepcode.cn/2023/09/Kubevirt001/index.html">
+<meta property="og:site_name" content="houming818">
+<meta property="og:description" content="参考资料 官方文档-安装 kubevirt-101  环境说明   主机名 IP OS role    c12 192.168.1.112 CentOS-7 master   c13 192.168.1.113 CentOS-7 node   c14 192.168.1.114 CentOS-7 node    kubevirt: v0.49.0   安装文档KubeVirt 是 Kubernet">
+<meta property="og:locale">
+<meta property="article:published_time" content="2023-09-22T05:00:00.000Z">
+<meta property="article:modified_time" content="2023-09-24T06:22:41.193Z">
+<meta property="article:author" content="houming818">
+<meta property="article:tag" content="运维 开发 DevOps Kubevirt">
+<meta name="twitter:card" content="summary">
+
+
+<link rel="canonical" href="https://www.grepcode.cn/2023/09/Kubevirt001/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-Hans","comments":true,"permalink":"https://www.grepcode.cn/2023/09/Kubevirt001/","path":"2023/09/Kubevirt001/","title":"Kubevirt实战/环境搭建与测试项目"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>Kubevirt实战/环境搭建与测试项目 | houming818</title>
+  <!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-NMMN9CLG7N"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-NMMN9CLG7N');
+</script>
+
+
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+<link rel="alternate" href="/atom.xml" title="houming818" type="application/atom+xml">
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">houming818</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">coding and thinking</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="Search" role="button">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>About</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags</a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories</a></li><li class="menu-item menu-item-sitemap"><a href="/sitemap.xml" rel="section"><i class="fa fa-sitemap fa-fw"></i>Sitemap</a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>Search
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup"><div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off" maxlength="80"
+           placeholder="Searching..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close" role="button">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div class="search-result-container no-result">
+  <div class="search-result-icon">
+    <i class="fa fa-spinner fa-pulse fa-5x"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8F%82%E8%80%83%E8%B5%84%E6%96%99"><span class="nav-number">1.</span> <span class="nav-text">参考资料</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%8E%AF%E5%A2%83%E8%AF%B4%E6%98%8E"><span class="nav-number">2.</span> <span class="nav-text">环境说明</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%AE%89%E8%A3%85%E6%96%87%E6%A1%A3"><span class="nav-number">3.</span> <span class="nav-text">安装文档</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%A6%81%E6%B1%82"><span class="nav-number">3.1.</span> <span class="nav-text">要求</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%9C%A8-Kubernetes-%E4%B8%8A%E5%AE%89%E8%A3%85-KubeVirt"><span class="nav-number">3.2.</span> <span class="nav-text">在 Kubernetes 上安装 KubeVirt</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%AE%89%E8%A3%85%E6%AF%8F%E6%97%A5%E5%BC%80%E5%8F%91%E8%80%85%E6%9E%84%E5%BB%BA"><span class="nav-number">3.3.</span> <span class="nav-text">安装每日开发者构建</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%AE%9E%E9%AA%8C%E6%80%A7-ARM64-%E5%BC%80%E5%8F%91%E4%BA%BA%E5%91%98%E6%9E%84%E5%BB%BA"><span class="nav-number">3.4.</span> <span class="nav-text">实验性 ARM64 开发人员构建</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BB%8E%E6%BA%90%E5%A4%B4%E9%83%A8%E7%BD%B2"><span class="nav-number">3.5.</span> <span class="nav-text">从源头部署</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%AE%89%E8%A3%85%E7%BD%91%E7%BB%9C%E6%8F%92%E4%BB%B6%EF%BC%88%E5%8F%AF%E9%80%89%EF%BC%89"><span class="nav-number">3.6.</span> <span class="nav-text">安装网络插件（可选）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%99%90%E5%88%B6-KubeVirt-%E7%BB%84%E4%BB%B6%E8%8A%82%E7%82%B9%E6%94%BE%E7%BD%AE"><span class="nav-number">3.7.</span> <span class="nav-text">限制 KubeVirt 组件节点放置</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%AE%89%E8%A3%85Virtctl"><span class="nav-number">3.8.</span> <span class="nav-text">安装Virtctl</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%AE%9E%E9%99%85%E5%AE%89%E8%A3%85"><span class="nav-number">4.</span> <span class="nav-text">实际安装</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#apply"><span class="nav-number">4.1.</span> <span class="nav-text">apply</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%AA%8C%E8%AF%81%E5%AE%89%E8%A3%85%E7%BB%93%E6%9E%9C"><span class="nav-number">4.2.</span> <span class="nav-text">验证安装结果</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%B8%8B%E8%BD%BDvirtctl"><span class="nav-number">4.3.</span> <span class="nav-text">下载virtctl</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%AE%9E%E9%99%85%E4%BD%BF%E7%94%A8"><span class="nav-number">5.</span> <span class="nav-text">实际使用</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%88%9B%E5%BB%BA-Definition"><span class="nav-number">5.1.</span> <span class="nav-text">创建 Definition</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%88%9B%E5%BB%BA-Instance"><span class="nav-number">5.2.</span> <span class="nav-text">创建 Instance</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%85%B3%E9%97%AD%E5%92%8C%E6%B8%85%E7%90%86-Definition-%E5%92%8C-Instance"><span class="nav-number">5.3.</span> <span class="nav-text">关闭和清理 Definition 和 Instance</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%80%BB%E7%BB%93%E5%88%86%E6%9E%90"><span class="nav-number">6.</span> <span class="nav-text">总结分析</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="houming818"
+      src="/images/logo.jpg">
+  <p class="site-author-name" itemprop="name">houming818</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">15</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">7</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">11</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
+</div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-Hans">
+    <link itemprop="mainEntityOfPage" href="https://www.grepcode.cn/2023/09/Kubevirt001/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/logo.jpg">
+      <meta itemprop="name" content="houming818">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="houming818">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="Kubevirt实战/环境搭建与测试项目 | houming818">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Kubevirt实战/环境搭建与测试项目
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">Posted on</span>
+
+      <time title="Created: 2023-09-22 13:00:00" itemprop="dateCreated datePublished" datetime="2023-09-22T13:00:00+08:00">2023-09-22</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">Edited on</span>
+      <time title="Modified: 2023-09-24 14:22:41" itemprop="dateModified" datetime="2023-09-24T14:22:41+08:00">2023-09-24</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">In</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/04-kubernetes/" itemprop="url" rel="index"><span itemprop="name">04 kubernetes</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><h2 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h2><ol>
+<li><a target="_blank" rel="noopener" href="https://kubevirt.io/user-guide/operations/installation/">官方文档-安装</a></li>
+<li><a target="_blank" rel="noopener" href="https://www.katacoda.com/kubevirt/scenarios/kubevirt-101">kubevirt-101</a></li>
+</ol>
+<h2 id="环境说明"><a href="#环境说明" class="headerlink" title="环境说明"></a>环境说明</h2><table>
+<thead>
+<tr>
+<th>主机名</th>
+<th>IP</th>
+<th>OS</th>
+<th>role</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>c12</td>
+<td>192.168.1.112</td>
+<td>CentOS-7</td>
+<td>master</td>
+</tr>
+<tr>
+<td>c13</td>
+<td>192.168.1.113</td>
+<td>CentOS-7</td>
+<td>node</td>
+</tr>
+<tr>
+<td>c14</td>
+<td>192.168.1.114</td>
+<td>CentOS-7</td>
+<td>node</td>
+</tr>
+</tbody></table>
+<blockquote>
+<p>kubevirt: v0.49.0</p>
+</blockquote>
+<!-- #region -->
+<h2 id="安装文档"><a href="#安装文档" class="headerlink" title="安装文档"></a>安装文档</h2><p>KubeVirt 是 Kubernetes 的虚拟化插件，本指南假定已安装 Kubernetes 集群。</p>
+<blockquote>
+<p>安装kubernets单点测试集群可参考 <a href="https://www.grepcode.cn/devops/kubernetes/standalone.html">搭建单点Kubernetes cluster</a></p>
+<p>安装kubernets多点测试集群可参考 <a target="_blank" rel="noopener" href="https://github.com/kubernetes-sigs/kubespray">如何使用kubespray</a></p>
+</blockquote>
+<h3 id="要求"><a href="#要求" class="headerlink" title="要求"></a>要求</h3><p>在开始之前需要满足一些要求：</p>
+<ul>
+<li>基于 Kubernetes 1.10 或更高版本的Kubernetes集群或衍生产品（如OpenShift 、Tectonic)</li>
+<li>Kubernetes apiserver 必须具有–allow-privileged=true才能运行 KubeVirt 的特权 DaemonSet。</li>
+<li>kubectl 客户端实用程序</li>
+<li>容器运行时支持</li>
+</ul>
+<p>验证硬件虚拟化支持</p>
+<p>推荐使用支持虚拟化的硬件。您可以使用 virt-host-validate 来确保您的主机能够运行虚拟化工作负载：</p>
+<pre><code>$ virt-host-validate qemu
+  QEMU: Checking for hardware virtualization     : PASS
+  QEMU: Checking if device /dev/kvm exists      : PASS
+  QEMU: Checking if device /dev/kvm is accessible : PASS
+  QEMU: Checking if device /dev/vhost-net exists  : PASS
+  QEMU: Checking if device /dev/net/tun exists   : PASS
+</code></pre>
+<h3 id="在-Kubernetes-上安装-KubeVirt"><a href="#在-Kubernetes-上安装-KubeVirt" class="headerlink" title="在 Kubernetes 上安装 KubeVirt"></a>在 Kubernetes 上安装 KubeVirt</h3><p>KubeVirt 可以使用 KubeVirt 操作符安装，该操作符管理所有 KubeVirt 核心组件的生命周期。以下是如何使用官方版本安装 KubeVirt 的示例。</p>
+<pre><code># Pick an upstream version of KubeVirt to install
+$ export RELEASE=v0.49.0
+# Deploy the KubeVirt operator
+$ kubectl apply -f https://github.com/kubevirt/kubevirt/releases/download/$&#123;RELEASE&#125;/kubevirt-operator.yaml
+# Create the KubeVirt CR (instance deployment request) which triggers the actual installation
+$ kubectl apply -f https://github.com/kubevirt/kubevirt/releases/download/$&#123;RELEASE&#125;/kubevirt-cr.yaml
+# wait until all KubeVirt components are up
+$ kubectl -n kubevirt wait kv kubevirt --for condition=Available
+</code></pre>
+<p>如果硬件虚拟化不可用，则 可以通过在 KubeVirt CR中设置如下来启用软件仿真回退：<code>spec.configuration.developerConfiguration.useEmulation=true</code></p>
+<pre><code>$ kubectl edit -n kubevirt kubevirt kubevirt
+</code></pre>
+<p>将以下内容添加到<code>kubevirt.yaml</code>文件中</p>
+<pre><code>    spec:
+      ...
+      configuration:
+        developerConfiguration:
+          useEmulation: true
+</code></pre>
+<blockquote>
+<p>注意：在发布 v0.20.0 之前，kubectl wait 命令的条件被命名为“Ready”而不是“Available”</p>
+<p>注意：在 KubeVirt 0.34.2 之前，kubevirt-config在 install-namespace 中调用的 ConfigMap 用于配置 KubeVirt。自 0.34.2 起，此方法已被弃用。configmap 仍然优先configuration于 CR 存在，但它不会接收未来的更新，您应该将任何自定义配置迁移到spec.configurationKubeVirt CR 上。</p>
+</blockquote>
+<p>所有新组件都将部署在kubevirt命名空间下：</p>
+<pre><code>kubectl get pods -n kubevirt
+NAME                                           READY     STATUS        RESTARTS   AGE
+virt-api-6d4fc3cf8a-b2ere                      1/1       Running       0          1m
+virt-controller-5d9fc8cf8b-n5trt               1/1       Running       0          1m
+virt-handler-vwdjx                             1/1       Running       0          1m
+...
+</code></pre>
+<h3 id="安装每日开发者构建"><a href="#安装每日开发者构建" class="headerlink" title="安装每日开发者构建"></a>安装每日开发者构建</h3><p>KubeVirt 每天从当前主分支发布一个开发人员构建。通过查看我们的 nightly-build-jobs可以了解上一次发布的时间。</p>
+<p>要安装最新的开发人员版本，请运行以下命令：</p>
+<pre><code>$ LATEST=$(curl -L https://storage.googleapis.com/kubevirt-prow/devel/nightly/release/kubevirt/kubevirt/latest)
+$ kubectl apply -f https://storage.googleapis.com/kubevirt-prow/devel/nightly/release/kubevirt/kubevirt/$&#123;LATEST&#125;/kubevirt-operator.yaml
+$ kubectl apply -f https://storage.googleapis.com/kubevirt-prow/devel/nightly/release/kubevirt/kubevirt/$&#123;LATEST&#125;/kubevirt-cr.yaml
+</code></pre>
+<p>要找出此构建基于哪个提交，请运行：</p>
+<pre><code>$ LATEST=$(curl -L https://storage.googleapis.com/kubevirt-prow/devel/nightly/release/kubevirt/kubevirt/latest)
+$ curl https://storage.googleapis.com/kubevirt-prow/devel/nightly/release/kubevirt/kubevirt/$&#123;LATEST&#125;/commit
+d358cf085b5a86cc4fa516215f8b757a4e61def2
+</code></pre>
+<h3 id="实验性-ARM64-开发人员构建"><a href="#实验性-ARM64-开发人员构建" class="headerlink" title="实验性 ARM64 开发人员构建"></a>实验性 ARM64 开发人员构建</h3><p>可以像这样安装实验性 ARM64 开发人员版本：</p>
+<pre><code>$ LATEST=$(curl -L https://storage.googleapis.com/kubevirt-prow/devel/nightly/release/kubevirt/kubevirt/latest-arm64)
+$ kubectl apply -f https://storage.googleapis.com/kubevirt-prow/devel/nightly/release/kubevirt/kubevirt/$&#123;LATEST&#125;/kubevirt-operator-arm64.yaml
+$ kubectl apply -f https://storage.googleapis.com/kubevirt-prow/devel/nightly/release/kubevirt/kubevirt/$&#123;LATEST&#125;/kubevirt-cr-arm64.yaml
+</code></pre>
+<h3 id="从源头部署"><a href="#从源头部署" class="headerlink" title="从源头部署"></a>从源头部署</h3><p>请参阅开发人员入门指南 以了解如何从源代码构建和部署 KubeVirt。</p>
+<h3 id="安装网络插件（可选）"><a href="#安装网络插件（可选）" class="headerlink" title="安装网络插件（可选）"></a>安装网络插件（可选）</h3><p>KubeVirt 本身并没有带来任何额外的网络插件，它只是允许用户使用它们。如果您想将您的虚拟机连接到多个网络（Multus CNI）或完全控制 L2（OVS CNI），您需要部署相应的网络插件。有关详细信息，请参阅 OVS CNI 安装指南。</p>
+<blockquote>
+<p>注意： KubeVirt Ansible网络剧本 默认安装这些插件。</p>
+</blockquote>
+<h3 id="限制-KubeVirt-组件节点放置"><a href="#限制-KubeVirt-组件节点放置" class="headerlink" title="限制 KubeVirt 组件节点放置"></a>限制 KubeVirt 组件节点放置</h3><p>您可以通过编辑 KubeVirt CR 来限制 KubeVirt 组件在集群节点中的放置：</p>
+<p>KubeVirt 控制平面组件（virt-controller、virt-api）的放置由<code>KubeVirt CR</code>中的字段<code>.spec.infra.nodePlacement</code>控制。</p>
+<p>virt-handler DaemonSet pod 的放置（以及因此调度到集群的 VM 工作负载的放置）由<code>KubeVirt CR</code>中的字段<code>.spec.workloads.nodePlacement</code>控制。</p>
+<p>对于这些.nodePlacement对象中的每一个.affinity，可以配置.nodeSelector和子字段。 有关使用这些字段的更多信息，.tolerations请参阅API 参考中的说明。</p>
+<p>例如，要将 virt-controller 和 virt-api pod 限制为仅在 control-plane 节点上运行：</p>
+<pre><code>kubectl patch -n kubevirt kubevirt kubevirt --type merge --patch &#39;&#123;&quot;spec&quot;: &#123;&quot;infra&quot;: &#123;&quot;nodePlacement&quot;: &#123;&quot;nodeSelector&quot;: &#123;&quot;node-role.kubernetes.io/control-plane&quot;: &quot;&quot;&#125;&#125;&#125;&#125;&#125;&#39;
+</code></pre>
+<p>要将 virt-handler pod 限制为仅在具有<code>region=primary</code>标签的节点上运行：</p>
+<pre><code>kubectl patch -n kubevirt kubevirt kubevirt --type merge --patch &#39;&#123;&quot;spec&quot;: &#123;&quot;workloads&quot;: &#123;&quot;nodePlacement&quot;: &#123;&quot;nodeSelector&quot;: &#123;&quot;region&quot;: &quot;primary&quot;&#125;&#125;&#125;&#125;&#125;&#39;
+</code></pre>
+<h3 id="安装Virtctl"><a href="#安装Virtctl" class="headerlink" title="安装Virtctl"></a>安装Virtctl</h3><pre><code>wget -O /usr/local/bin/virtctl https://github.com/kubevirt/kubevirt/releases/download/$&#123;RELEASE&#125;/virtctl-$&#123;RELEASE&#125;-linux-amd64
+</code></pre>
+<!-- #endregion -->
+
+<!-- #region -->
+<h2 id="实际安装"><a href="#实际安装" class="headerlink" title="实际安装"></a>实际安装</h2><p>在C12 C13 C14上执行安装过程</p>
+<h3 id="apply"><a href="#apply" class="headerlink" title="apply"></a>apply</h3><pre><code class="bash"># Pick an upstream version of KubeVirt to install
+root@c12$ export RELEASE=v0.49.0
+# output
+</code></pre>
+<pre><code class="bash"># Deploy the KubeVirt operator
+root@c12$ kubectl apply -f https://github.com/kubevirt/kubevirt/releases/download/$&#123;RELEASE&#125;/kubevirt-operator.yaml
+# output
+namespace/kubevirt created
+customresourcedefinition.apiextensions.k8s.io/kubevirts.kubevirt.io created
+priorityclass.scheduling.k8s.io/kubevirt-cluster-critical created
+clusterrole.rbac.authorization.k8s.io/kubevirt.io:operator created
+serviceaccount/kubevirt-operator created
+role.rbac.authorization.k8s.io/kubevirt-operator created
+rolebinding.rbac.authorization.k8s.io/kubevirt-operator-rolebinding created
+clusterrole.rbac.authorization.k8s.io/kubevirt-operator created
+clusterrolebinding.rbac.authorization.k8s.io/kubevirt-operator created
+deployment.apps/virt-operator created
+</code></pre>
+<pre><code class="bash"># Create the KubeVirt CR (instance deployment request) which triggers the actual installation
+root@c12$ kubectl apply -f https://github.com/kubevirt/kubevirt/releases/download/$&#123;RELEASE&#125;/kubevirt-cr.yaml
+# output
+kubevirt.kubevirt.io/kubevirt created
+</code></pre>
+<h3 id="验证安装结果"><a href="#验证安装结果" class="headerlink" title="验证安装结果"></a>验证安装结果</h3><pre><code class="bash"># wait until all KubeVirt components are up
+root@c12$ kubectl -n kubevirt wait kv kubevirt --for condition=Available
+# 等待一段时间
+error: timed out waiting for the condition on kubevirts/kubevirt
+
+root@c12$ kubectl get pods -A
+...
+kubevirt      virt-controller-7556586574-g5jcb   1/1     Running            0          8m11s
+kubevirt      virt-controller-7556586574-z54jk   0/1     ImagePullBackOff   0          8m11s
+kubevirt      virt-handler-29qpt                 1/1     Running            0          8m11s
+...
+
+# 有个pod有问题，查看log
+root@c12$ kubectl describe pod -n kubevirt virt-controller-7556586574-z54jk
+...
+  Normal   Scheduled  10m                  default-scheduler  Successfully assigned kubevirt/virt-controller-7556586574-z54jk to c13
+  Warning  Failed     4m40s                kubelet            Failed to pull image &quot;quay.io/kubevirt/virt-controller:v0.49.0&quot;: rpc error: code = Unknown desc = context canceled
+  Warning  Failed     4m40s                kubelet            Error: ErrImagePull
+  Normal   BackOff    4m40s                kubelet            Back-off pulling image &quot;quay.io/kubevirt/virt-controller:v0.49.0&quot;
+  Warning  Failed     4m40s                kubelet            Error: ImagePullBackOff
+  Normal   Pulling    4m28s (x2 over 10m)  kubelet            Pulling image &quot;quay.io/kubevirt/virt-controller:v0.49.0
+...
+
+# 镜像拉取失败，用ansible执行镜像拉取
+root@*$ ansible -i inventory/hosts c12,c13,c14 -m shell -a &#39;docker pull quay.io/kubevirt/virt-controller:v0.49.0&#39; -b
+
+# 再次执行,结果符合预期
+root@c12$ kubectl -n kubevirt wait kv kubevirt --for condition=Available
+kubevirt.kubevirt.io/kubevirt condition met
+
+# 查看kubevirt状态
+root@c12$ kubectl get pods -n kubevirt
+NAME                               READY   STATUS    RESTARTS   AGE
+virt-api-b9fc66c44-78bxs           1/1     Running   0          163m
+virt-api-b9fc66c44-cqv7w           1/1     Running   0          163m
+virt-controller-7556586574-g5jcb   1/1     Running   0          162m
+virt-controller-7556586574-z54jk   1/1     Running   0          162m
+virt-handler-29qpt                 1/1     Running   0          162m
+virt-handler-8gv78                 1/1     Running   0          162m
+virt-handler-sqnlz                 1/1     Running   0          162m
+virt-operator-7c67945b69-8782n     1/1     Running   0          164m
+virt-operator-7c67945b69-lsrbr     1/1     Running   0          164m
+</code></pre>
+<h3 id="下载virtctl"><a href="#下载virtctl" class="headerlink" title="下载virtctl"></a>下载virtctl</h3><pre><code>root@c12$ wget -O /usr/local/bin/virtctl https://github.com/kubevirt/kubevirt/releases/download/$&#123;RELEASE&#125;/virtctl-$&#123;RELEASE&#125;-linux-amd64
+root@c12$ chmod +x /usr/local/bin/virtctl
+</code></pre>
+<!-- #endregion -->
+
+<!-- #region -->
+<h2 id="实际使用"><a href="#实际使用" class="headerlink" title="实际使用"></a>实际使用</h2><p>现在一切准备就绪，可以继续并启动 VM。</p>
+<h3 id="创建-Definition"><a href="#创建-Definition" class="headerlink" title="创建 Definition"></a>创建 Definition</h3><p>下面的命令将虚拟机<code>Definition(定义)</code>的 YAML 应用到我们当前的 Kubernetes 环境中，定义 VM 名称、所需资源（磁盘、CPU、内存）等。</p>
+<pre><code>root@c12$ kubectl apply -f https://kubevirt.io/labs/manifests/vm.yaml
+virtualmachine.kubevirt.io/testvm created
+</code></pre>
+<p>得益于在我们的环境中启用了 KubeVirt 功能，我们正在以与创建任何其他 Kubernetes 资源相同的方式创建虚拟机。现在我们有一个虚拟机作为 Kubernetes 资源。</p>
+<p>创建 vm 资源后，您可以使用标准的“kubectl”命令管理 VM：</p>
+<pre><code>root@c12$ kubectl get vms
+NAME     AGE   STATUS    READY
+testvm   18s   Stopped   False
+
+root@c12$ kubectl get vms -o yaml testvm
+apiVersion: kubevirt.io/v1                    
+kind: VirtualMachine           
+metadata:               
+  annotations:     
+    kubectl.kubernetes.io/last-applied-configuration: |
+...
+</code></pre>
+<p>检查是否定义了 VM（使用命令<code>kubectl get vms</code>）：</p>
+<pre><code>root@c12$ kubectl get vms
+NAME     AGE     STATUS    READY
+testvm   2m21s   Stopped   False
+</code></pre>
+<p>从输出中注意到 VM 尚未运行。</p>
+<h3 id="创建-Instance"><a href="#创建-Instance" class="headerlink" title="创建 Instance"></a>创建 Instance</h3><p>要启动 VM Instance(实例)，使用 virtctl 执行如下操作：</p>
+<pre><code>root@c12$ virtctl start testvm
+VM testvm was scheduled to start
+</code></pre>
+<p>现在您可以再次检查 VM 状态：</p>
+<pre><code>root@c12$ kubectl get vms
+NAME     AGE   STATUS     READY
+testvm   3m    Starting   False
+# 等待一会再次执行
+NAME     AGE     STATUS    READY
+testvm   3m31s   Running   True
+</code></pre>
+<p>VirtualMachine资源包含 VM 的Definition和Status。具有实例附加的关联资源，即VirtualMachineInstance.</p>
+<p>虚拟机运行后，您可以检查其状态：</p>
+<pre><code>root@c12$ kubectl get vmis
+NAME     AGE   PHASE     IP             NODENAME   READY
+testvm   63s   Running   10.233.66.10   c14        True
+
+root@c12$ kubectl get vmis -o yaml testvm
+# output 略
+</code></pre>
+<p>准备就绪后，命令<code>kubectl get vmis</code>将打印如下内容：</p>
+<pre><code>root@c12$ kubectl get vmis
+NAME     AGE    PHASE     IP             NODENAME   READY
+testvm   109s   Running   10.233.66.10   c14        True
+</code></pre>
+<p>访问虚拟机（串行控制台和 vnc）</p>
+<p>现在 VM 正在运行，您可以访问其串行控制台：</p>
+<blockquote>
+<p>注意： ^]表示,按“CTRL”和“]”键退出控制台。</p>
+</blockquote>
+<pre><code># Connect to the serial console
+root@c12$ virtctl console testvm
+# 显示prompt，输入用户名：&#39;cirros&#39; 密码：&#39;gocubsgo&#39;登录
+testvm login: cirros
+Password: 
+$ id
+uid=1000(cirros) gid=1000(cirros) groups=1000(cirros)
+$ hostname
+testvm
+$ 
+</code></pre>
+<p>在可以访问 VNC 客户端的环境中，可以使用virtctl vnc命令访问 VM 的图形控制台。</p>
+<h3 id="关闭和清理-Definition-和-Instance"><a href="#关闭和清理-Definition-和-Instance" class="headerlink" title="关闭和清理 Definition 和 Instance"></a>关闭和清理 Definition 和 Instance</h3><p>关闭 VM 还使用以下virtctl命令：</p>
+<pre><code>root@c12$ virtctl stop testvm
+VM testvm was scheduled to stop
+
+root@c12$ kubectl get vm
+NAME     AGE     STATUS    READY
+testvm   9m48s   Stopped   False
+</code></pre>
+<p>最后，可以使用以下命令删除 VM Definition：</p>
+<pre><code>root@c12$ kubectl delete vms testvm
+virtualmachine.kubevirt.io &quot;testvm&quot; deleted
+</code></pre>
+<!-- #endregion -->
+
+<h2 id="总结分析"><a href="#总结分析" class="headerlink" title="总结分析"></a>总结分析</h2><p>  <strong>TODO</strong></p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/%E8%BF%90%E7%BB%B4-%E5%BC%80%E5%8F%91-DevOps-Kubevirt/" rel="tag"># 运维 开发 DevOps Kubevirt</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2023/09/Kubevirt002/" rel="prev" title="Kubevirt实战/使用 CDI 导入并启动 VM">
+                  <i class="fa fa-angle-left"></i> Kubevirt实战/使用 CDI 导入并启动 VM
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2023/09/Kubebuilder003/" rel="next" title="OAM学习笔记x01">
+                  OAM学习笔记x01 <i class="fa fa-angle-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2023</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">houming818</span>
+  </div>
+  <div class="powered-by">Powered by <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/" rel="noopener" target="_blank">NexT.Gemini</a>
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="back-to-top" role="button" aria-label="Back to top">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/next-boot.js"></script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-generator-searchdb/1.4.1/search.js" integrity="sha256-1kfA5uHPf65M5cphT2dvymhkuyHPQp5A53EGZOnOLmc=" crossorigin="anonymous"></script>
+<script src="/js/third-party/search/local-search.js"></script>
+
+
+
+
+
+
+
+  
+
+
+
+
+
+</body>
+</html>

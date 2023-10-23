@@ -1,0 +1,384 @@
+<?xml version="1.0" encoding="utf-8"?>
+<search> 
+  
+  
+    
+    <entry>
+      <title>过河卒</title>
+      <link href="/2023/10/poem002/"/>
+      <url>/2023/10/poem002/</url>
+      
+        <content type="html"><![CDATA[<pre><code>四方矩阵无边，岁岁年年向前。人生几度秋雨，进退也是人间。命里自有殊途，离别不似再见。一帆程得花好，家国也正团圆。</code></pre>]]></content>
+      
+      
+      <categories>
+          
+          <category> 99 诗词 </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> 诗词 </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>初始化设置</title>
+      <link href="/2023/09/blueking004/"/>
+      <url>/2023/09/blueking004/</url>
+      
+        <content type="html"><![CDATA[<h2 id="这里列举了一些常用文档，用于初始化环境"><a href="#这里列举了一些常用文档，用于初始化环境" class="headerlink" title="这里列举了一些常用文档，用于初始化环境"></a>这里列举了一些常用文档，用于初始化环境</h2><h3 id="初始化邮件通知"><a href="#初始化邮件通知" class="headerlink" title="初始化邮件通知"></a><a href="https://bk.tencent.com/docs/markdown/ZH/PaaS/1.0/UserGuide/UserCase/send_mail.md">初始化邮件通知</a></h3><p>需要注意的是，文中说的测试接口：</p><p>用法一：<br>{<br>    “bk_app_code”:”“,<br>    “bk_app_secret”:”“,<br>    “bk_username”: “admin”,<br>    “receiver”: “****@qq.com”,<br>    “sender”: “<a href="mailto:&#x68;&#x6f;&#x75;&#109;&#x69;&#110;&#103;&#64;&#x64;&#111;&#109;&#x61;&#105;&#x6e;&#x2e;&#x63;&#x6e;">&#x68;&#x6f;&#x75;&#109;&#x69;&#110;&#103;&#64;&#x64;&#111;&#109;&#x61;&#105;&#x6e;&#x2e;&#x63;&#x6e;</a>“,<br>    “title”: “This is a Test”,<br>    “content”: “<html>Welcome to Blueking</html>“<br>}</p><p>用法二：<br>{<br>    “bk_app_code”:”“,<br>    “bk_app_secret”:”“,<br>    “bk_username”: “admin”,<br>    “receiver”: “****@qq.com”,<br>    “sender”: “蓝鲸<a href="mailto:&#x68;&#x6f;&#x75;&#x6d;&#105;&#110;&#103;&#x40;&#100;&#111;&#109;&#97;&#105;&#110;&#x2e;&#x63;&#x6e;">&#x68;&#x6f;&#x75;&#x6d;&#105;&#110;&#103;&#x40;&#100;&#111;&#109;&#97;&#105;&#110;&#x2e;&#x63;&#x6e;</a>“,<br>    “title”: “This is a Test”,<br>    “content”: “<html>Welcome to Blueking</html>“<br>}</p><p>这里的sender，只能写smtp配置的sender。否则会发送失败。</p><pre><code>ERROR [2023-09-26 16:08:43] /app/components/generic/templates/cmsi/toolkit/send_mail_with_smtp.py 77 send_mail 22 140579342142536         1306205 send mail exception, server: smtp.exmail.qq.com:465 Traceback (most recent call last):  File &quot;/app/components/generic/templates/cmsi/toolkit/send_mail_with_smtp.py&quot;, line 70, in send_mail    smtp.sendmail(mail_sender, all_receiver, msg.as_string())  File &quot;/usr/local/lib/python3.6/smtplib.py&quot;, line 872, in sendmail    raise SMTPSenderRefused(code, resp, from_addr)smtplib.SMTPSenderRefused: (501, b&#39;mail from address must be same as authorization user&#39;, &#39;admin&#39;)</code></pre><p>然后，测试下通过邮箱进行密码找回，应该是可以了。</p>]]></content>
+      
+      
+      <categories>
+          
+          <category> 01 蓝鲸计划 </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> 运维 开发 DevOps 蓝鲸 blueking 初始化 </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>蓝鲸重置密码</title>
+      <link href="/2023/09/blueking003/"/>
+      <url>/2023/09/blueking003/</url>
+      
+        <content type="html"><![CDATA[<h2 id="场景说明"><a href="#场景说明" class="headerlink" title="场景说明"></a>场景说明</h2><p>有的时候，忘记了密码。如果登录采用的是蓝鲸本地账号登录。可以采用如下方法重置密码。</p><pre><code class="bash">##### 登录login Pod$ kubectl -n blueking exec -it bk-user-api-web-d7569b476-9kn4d bashroot@bk-login-web-dddd7868d-n2g9r:/app#$ python manage.py shell&gt;&gt;&gt; from bkuser_core.profiles.models import Profile&gt;&gt;&gt; from django.contrib.auth.hashers import make_password&gt;&gt;&gt; admin = Profile.objects.get(username=&#39;admin&#39;, domain=&#39;default.local&#39;)&gt;&gt;&gt; admin.password = make_password(&quot;********&quot;)&gt;&gt;&gt; admin.save()</code></pre>]]></content>
+      
+      
+      <categories>
+          
+          <category> 01 蓝鲸计划 </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> 运维 开发 DevOps 蓝鲸 ubuntu blueking 密码重置 </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>搭建蓝鲸</title>
+      <link href="/2023/09/blueking002/"/>
+      <url>/2023/09/blueking002/</url>
+      
+        <content type="html"><![CDATA[<h2 id="参考链接"><a href="#参考链接" class="headerlink" title="参考链接"></a>参考链接</h2><ol><li><p><a href="https://bk.tencent.com/docs/markdown/ZH/DeploymentGuides/7.1/prepare-bkctrl.md">准备中控机</a></p></li><li><p><a href="https://bk.tencent.com/docs/markdown/ZH/DeploymentGuides/7.0/install-bkce.md">快速部署基础套餐</a></p></li></ol><h2 id="过程说明"><a href="#过程说明" class="headerlink" title="过程说明"></a>过程说明</h2><p>蓝鲸基础套餐的部署过程大致可以分为 5 个阶段：</p><pre><code>1. 完善配置文件2. 部署存储服务3. 部署后台服务4. 完善 SaaS 运行环境5. 部署 SaaS：流程服务和标准运维</code></pre><p>详细内容，从参考文件一条条看。</p><p>总结：</p><pre><code class="bash">#### 准备工作 ####$ mkdir -p ~/bin/                      $ curl -sSf https://bkopen-1252002024.file.myqcloud.com/ce7/7.1-stable/bkdl-7.1-stable.sh -o ~/bin/bkdl-7.1-stable.sh$ chmod +x ~/bin/bkdl-7.1-stable.sh$ ~/bin/bkdl-7.1-stable.sh -r latest tools$ ls $HOME/bkce7.1-install/bin# 检查下，看看安装目录是不是有文件$ vim ~/.bashrcexport PATH=$HOME/bkce7.1-install/bin/:$PATH$ source ~/.bashrc$ which helm/root/bkce7.1-install/bin/helm# 确认PATH配置正确/root/bkce7.1-install$ tar xf ./bin/helm-plugin-diff.tgz -C ~/# 解压helm插件$ helm plugin listNAME    VERSION DESCRIPTION                           diff    3.1.3   Preview helm upgrade changes as a diff# 查看helm插件安装是否成功$ kubectl config set-context --current --namespace=blueking# 配置默认命名空间$ node_ips=$(kubectl get nodes -o jsonpath=&#39;&#123;.items[*].status.addresses[?(@.type==&quot;InternalIP&quot;)].address&#125;&#39;)$ test -f /root/.ssh/id_rsa || ssh-keygen -N &#39;&#39; -t rsa -f /root/.ssh/id_rsa  # 如果不存在rsa key则创建一个。# 开始给发现的ip添加ssh key，期间需要你输入各节点的密码。$ for ip in $node_ips; do  ssh-copy-id &quot;$ip&quot; || &#123; echo &quot;failed on $ip.&quot;; break; &#125;  # 如果执行失败，则退出done/usr/bin/ssh-copy-id: INFO: Source of key(s) to be installed: &quot;/root/.ssh/id_rsa.pub&quot;The authenticity of host &#39;192.168.1.*3 (192.168.1.*3)&#39; cant be established.ECDSA key fingerprint is SHA256:**GTPw.Are you sure you want to continue connecting (yes/no/[fingerprint])? yes/usr/bin/ssh-copy-id: INFO: attempting to log in with the new key(s), to filter out any that are already installed/usr/bin/ssh-copy-id: WARNING: All keys were skipped because they already exist on the remote system.(if you think this is a mistake, you may want to use -f option)#### 开始部署基础套餐 ####$ ~/bin/bkdl-7.1-stable.sh -ur latest base demo nm_gse_full saas scripts#### 编辑部署元数据 ####$ vim ~/bkce7.1-install/blueking/environments/default/values.yaml编辑域名不支持https编辑ingressNginx：  hostNetwork: false</code></pre><p><img src="/images/blueking002_01.png" alt="Alt text"></p><pre><code class="bash">#### 一键部署之前 ##### 由于原来bk7的storage-class有一些问题，这里采用在下的yaml配置storage！$ kubectl apply -f https://cdn.grepcode.cn/blueking/local-path-storage.yamlNAME                      PROVISIONER             RECLAIMPOLICY   VOLUMEBINDINGMODE      ALLOWVOLUMEEXPANSION   AGElocal-storage (default)   rancher.io/local-path   Delete          WaitForFirstConsumer   false                  77s$ kubectl apply -f http://cdn.grepcode.cn/blueking/metrics-server.yaml#### 一键部署 ####BK_DOMAIN=bk.ftjd.org  # 请修改为你分配给蓝鲸平台的主域名cd ~/bkce7.1-install/blueking/  # 进入工作目录# 检查域名是否符合k8s域名规范，要全部内容匹配才执行脚本，否则提示域名不符合。# 执行时，ubuntu会提示yum不存在。检查后，尝试用yum安装的是 bash-completion jq uuid# ubuntu安装好后即可。scripts/setup_bkce7.sh -i base# 时间较长，耐心等待...# 如下命令会重复执行，直到部署完成for i in &#123;1..24&#125;; do   /root/bkce7.1-install/blueking/scripts/setup_bkce7.sh -i base  if [ &quot;$?&quot; -eq &quot;0&quot; ];   then     break  fidone</code></pre>]]></content>
+      
+      
+      <categories>
+          
+          <category> 01 蓝鲸计划 </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> 运维 开发 DevOps 蓝鲸 ubuntu blueking 搭建 </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>构建CronJob</title>
+      <link href="/2023/09/Kubebuilder002/"/>
+      <url>/2023/09/Kubebuilder002/</url>
+      
+        <content type="html"><![CDATA[<h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><h3 id="项目目的"><a href="#项目目的" class="headerlink" title="项目目的"></a>项目目的</h3><p>本教程应该带您（几乎）了解 Kubebuilder 的所有复杂性，从简单开始，逐步构建功能非常齐全的东西。</p><h3 id="参考链接"><a href="#参考链接" class="headerlink" title="参考链接"></a>参考链接</h3><p><a href="https://book.kubebuilder.io/cronjob-tutorial/cronjob-tutorial.html">项目原链接</a></p><p><a href="https://github.com/kubernetes-sigs/kubebuilder/tree/master/docs/book/src/cronjob-tutorial/testdata">案例源码</a></p><p><a href="https://juejin.cn/post/6844903952241131534">参考说明</a></p><h2 id="开始"><a href="#开始" class="headerlink" title="开始"></a>开始</h2><h3 id="搭建我们的项目"><a href="#搭建我们的项目" class="headerlink" title="搭建我们的项目"></a>搭建我们的项目</h3><p>确保已经完整运行 <a href="https://www.grepcode.cn/2023/Kubebuilder001/"><code>[Kuberbuilder实战] 环境搭建与测试项目</code></a> ,才能开始如下过程。</p><h4 id="初始化"><a href="#初始化" class="headerlink" title="初始化"></a>初始化</h4><pre><code class="shell"># we&#39;ll use a domain of tutorial.kubebuilder.local,# so all API groups will be &lt;group&gt;.tutorial.kubebuilder.local.$ kubebuilder init --domain tutorial.kubebuilder.local</code></pre><h3 id="项目有什么"><a href="#项目有什么" class="headerlink" title="项目有什么"></a>项目有什么</h3><p><a href="https://book.kubebuilder.io/cronjob-tutorial/basic-project.html">参考链接</a></p><h3 id="建设基础设施"><a href="#建设基础设施" class="headerlink" title="建设基础设施"></a>建设基础设施</h3><ul><li><code>go.mod</code>：与我们的项目匹配的新 Go 模块，具有基本依赖项</li><li><code>Makefile</code>：为构建和部署控制器制定目标</li><li><code>PROJECT</code>：用于搭建新组件的 Kubebuilder 元数据</li></ul><h3 id="启动配置"><a href="#启动配置" class="headerlink" title="启动配置"></a>启动配置</h3><h3 id="入口点"><a href="#入口点" class="headerlink" title="入口点"></a>入口点</h3><p><code>$ vim main.go</code></p><blockquote><p> Using RBAC Authorization的 <a href="https://kubernetes.io/docs/reference/access-authn-authz/rbac/">kubernetes 文档</a></p></blockquote><h3 id="简单说明"><a href="#简单说明" class="headerlink" title="简单说明"></a>简单说明</h3><p>我们的包从一些基本的导入开始。特别：</p><ul><li>核心控制器运行时库</li><li>默认的控制器运行时日志记录，Zap（稍后会详细介绍）</li></ul><p>每组控制器都需要一个 Scheme，它提供 Kinds 与其对应的 Go 类型之间的映射。</p><p>在编写 API 定义时，我们将更多地讨论 Kinds，因此请记住这一点以备后用。</p><p>此时，我们的主要功能相当简单：</p><ul><li><p>我们为指标设置了一些基本标志。</p></li><li><p>我们实例化一个 manager，它跟踪运行我们所有的控制器，以及设置共享缓存和客户端到 API 服务器（注意我们将我们的 Scheme 告诉了 manager）。</p></li><li><p>我们运行我们的管理器，它依次运行我们所有的控制器和网络钩子。管理器设置为运行，直到它收到正常关闭信号。这样，当我们在 Kubernetes 上运行时，我们的行为会很好地终止 pod。</p></li></ul><p>虽然我们还没有任何东西可以运行，但请记住该+kubebuilder:scaffold:builder评论在哪里 ——那里很快就会变得有趣。</p><p>您的项目范围更改为单个命名空间。在这种情况下，还建议通过将默认的 ClusterRole 和 ClusterRoleBinding 分别替换为 Role 和 RoleBinding 来限制对这个命名空间提供的授权。</p><h3 id="基本概念"><a href="#基本概念" class="headerlink" title="基本概念"></a>基本概念</h3><p>当我们谈论 Kubernetes 中的 API 时，我们经常使用 4 个术语：<code>组 groups</code>、<code>版本 versions</code>、<code>种类 kinds</code>和<code>资源 resources</code>。</p><p>Kubernetes 中的API <code>组</code>只是相关功能的集合,这些版本允许我们随着时间的推移改变 API 的工作方式</p><p>每个 API group-version 包含一个或多个 API 类型，我们称之为 Kinds。资源resources只是 API 中 Kind 的使用。</p><p>对于 CRD，每个 Kind 将对应一个资源。</p><h3 id="添加新的API"><a href="#添加新的API" class="headerlink" title="添加新的API"></a>添加新的API</h3><pre><code class="shell">$ kubebuilder create api --group batch --version v1 --kind CronJob</code></pre><h3 id="设计API"><a href="#设计API" class="headerlink" title="设计API"></a>设计API</h3><h3 id="控制器中有什么"><a href="#控制器中有什么" class="headerlink" title="控制器中有什么"></a>控制器中有什么</h3><p>控制器的工作是确保对于任何给定对象，全局的实际状态（集群状态和潜在的外部状态，例如为 Kubelet 运行容器或为云提供商运行负载均衡器）与对象中的所需状态相匹配。 这个过程称作 <code>reconciling</code></p><blockquote><p>It’s a controller’s job to ensure that, for any given object, the actual state of the world (both the cluster state, and potentially external state like running containers for Kubelet or loadbalancers for a cloud provider) matches the desired state in the object</p></blockquote><h3 id="实现控制器"><a href="#实现控制器" class="headerlink" title="实现控制器"></a>实现控制器</h3><p>梳理清楚控制器需要做的事情(<strong>书写Controller的第一步</strong>)</p><ol><li><p>加载命名的 CronJob</p></li><li><p>列出所有活动作业，并更新状态</p></li><li><p>根据历史限制清理旧作业</p></li><li><p>检查我们是否被暂停（如果我们被暂停，请不要做任何其他事情）</p></li><li><p>获取下一次预定运行</p></li><li><p>如果新作业按计划运行，没有超过截止日期，并且没有被我们的并发策略阻止，则运行新作业</p></li><li><p>当我们看到正在运行的作业（自动完成）或者是下一次计划运行的时间时重新排队。</p></li></ol><h3 id="实现默认-验证-webhook"><a href="#实现默认-验证-webhook" class="headerlink" title="实现默认/验证 webhook"></a>实现默认/验证 webhook</h3><h3 id="运行和部署控制器"><a href="#运行和部署控制器" class="headerlink" title="运行和部署控制器"></a>运行和部署控制器</h3><h4 id="部署证书管理器"><a href="#部署证书管理器" class="headerlink" title="部署证书管理器"></a>部署证书管理器</h4><h4 id="部署准入-Webhook"><a href="#部署准入-Webhook" class="headerlink" title="部署准入 Webhook"></a>部署准入 Webhook</h4><h3 id="编写控制器测试"><a href="#编写控制器测试" class="headerlink" title="编写控制器测试"></a>编写控制器测试</h3>]]></content>
+      
+      
+      <categories>
+          
+          <category> 02 云原生 </category>
+          
+          <category> kubebuilder </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> 运维 开发 DevOps Kubebuilder </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>OAM学习笔记x01</title>
+      <link href="/2023/09/Kubebuilder003/"/>
+      <url>/2023/09/Kubebuilder003/</url>
+      
+        <content type="html"><![CDATA[<p>基于 kubevela 的源码分析。</p><h2 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h2><p>环境配置 <a href="https://www.grepcode.cn/2023/Kubebuilder001/">link</a></p><p>WorkloadTrait架构分析, <a href="https://xie.infoq.cn/article/17ca767b516610c5c53f7725f">link</a></p><p>KubeVela参考资料一 <a href="https://kubevela.io/docs/install">link</a></p><h2 id="实验操作"><a href="#实验操作" class="headerlink" title="实验操作"></a>实验操作</h2><pre><code class="shell"># 初始化mod$ go mod init oam.yigong.pub# 初始化kubebuilder$ kubebuilder init --domain oam.yigong.pub# 新建API$ kubebuilder create api --group oam.yigong.pub --version v1 --kind CronJob</code></pre><h2 id="编写代码"><a href="#编写代码" class="headerlink" title="编写代码"></a>编写代码</h2><p>servicetrait_types.go</p><pre><code class="golang">type ServiceTraitStatus struct &#123;    runtimev1alpha1.ConditionedStatus `json:&quot;,inline&quot;`    // Resources managed by this service trait    Resources []runtimev1alpha1.TypedReference `json:&quot;resources,omitempty&quot;`&#125;</code></pre>]]></content>
+      
+      
+      <categories>
+          
+          <category> 02 云原生 </category>
+          
+          <category> kubebuilder </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> 运维 开发 DevOps Kubebuilder </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>Kubevirt实战/环境搭建与测试项目</title>
+      <link href="/2023/09/Kubevirt001/"/>
+      <url>/2023/09/Kubevirt001/</url>
+      
+        <content type="html"><![CDATA[<h2 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h2><ol><li><a href="https://kubevirt.io/user-guide/operations/installation/">官方文档-安装</a></li><li><a href="https://www.katacoda.com/kubevirt/scenarios/kubevirt-101">kubevirt-101</a></li></ol><h2 id="环境说明"><a href="#环境说明" class="headerlink" title="环境说明"></a>环境说明</h2><table><thead><tr><th>主机名</th><th>IP</th><th>OS</th><th>role</th></tr></thead><tbody><tr><td>c12</td><td>192.168.1.112</td><td>CentOS-7</td><td>master</td></tr><tr><td>c13</td><td>192.168.1.113</td><td>CentOS-7</td><td>node</td></tr><tr><td>c14</td><td>192.168.1.114</td><td>CentOS-7</td><td>node</td></tr></tbody></table><blockquote><p>kubevirt: v0.49.0</p></blockquote><!-- #region --><h2 id="安装文档"><a href="#安装文档" class="headerlink" title="安装文档"></a>安装文档</h2><p>KubeVirt 是 Kubernetes 的虚拟化插件，本指南假定已安装 Kubernetes 集群。</p><blockquote><p>安装kubernets单点测试集群可参考 <a href="https://www.grepcode.cn/devops/kubernetes/standalone.html">搭建单点Kubernetes cluster</a></p><p>安装kubernets多点测试集群可参考 <a href="https://github.com/kubernetes-sigs/kubespray">如何使用kubespray</a></p></blockquote><h3 id="要求"><a href="#要求" class="headerlink" title="要求"></a>要求</h3><p>在开始之前需要满足一些要求：</p><ul><li>基于 Kubernetes 1.10 或更高版本的Kubernetes集群或衍生产品（如OpenShift 、Tectonic)</li><li>Kubernetes apiserver 必须具有–allow-privileged=true才能运行 KubeVirt 的特权 DaemonSet。</li><li>kubectl 客户端实用程序</li><li>容器运行时支持</li></ul><p>验证硬件虚拟化支持</p><p>推荐使用支持虚拟化的硬件。您可以使用 virt-host-validate 来确保您的主机能够运行虚拟化工作负载：</p><pre><code>$ virt-host-validate qemu  QEMU: Checking for hardware virtualization     : PASS  QEMU: Checking if device /dev/kvm exists      : PASS  QEMU: Checking if device /dev/kvm is accessible : PASS  QEMU: Checking if device /dev/vhost-net exists  : PASS  QEMU: Checking if device /dev/net/tun exists   : PASS</code></pre><h3 id="在-Kubernetes-上安装-KubeVirt"><a href="#在-Kubernetes-上安装-KubeVirt" class="headerlink" title="在 Kubernetes 上安装 KubeVirt"></a>在 Kubernetes 上安装 KubeVirt</h3><p>KubeVirt 可以使用 KubeVirt 操作符安装，该操作符管理所有 KubeVirt 核心组件的生命周期。以下是如何使用官方版本安装 KubeVirt 的示例。</p><pre><code># Pick an upstream version of KubeVirt to install$ export RELEASE=v0.49.0# Deploy the KubeVirt operator$ kubectl apply -f https://github.com/kubevirt/kubevirt/releases/download/$&#123;RELEASE&#125;/kubevirt-operator.yaml# Create the KubeVirt CR (instance deployment request) which triggers the actual installation$ kubectl apply -f https://github.com/kubevirt/kubevirt/releases/download/$&#123;RELEASE&#125;/kubevirt-cr.yaml# wait until all KubeVirt components are up$ kubectl -n kubevirt wait kv kubevirt --for condition=Available</code></pre><p>如果硬件虚拟化不可用，则 可以通过在 KubeVirt CR中设置如下来启用软件仿真回退：<code>spec.configuration.developerConfiguration.useEmulation=true</code></p><pre><code>$ kubectl edit -n kubevirt kubevirt kubevirt</code></pre><p>将以下内容添加到<code>kubevirt.yaml</code>文件中</p><pre><code>    spec:      ...      configuration:        developerConfiguration:          useEmulation: true</code></pre><blockquote><p>注意：在发布 v0.20.0 之前，kubectl wait 命令的条件被命名为“Ready”而不是“Available”</p><p>注意：在 KubeVirt 0.34.2 之前，kubevirt-config在 install-namespace 中调用的 ConfigMap 用于配置 KubeVirt。自 0.34.2 起，此方法已被弃用。configmap 仍然优先configuration于 CR 存在，但它不会接收未来的更新，您应该将任何自定义配置迁移到spec.configurationKubeVirt CR 上。</p></blockquote><p>所有新组件都将部署在kubevirt命名空间下：</p><pre><code>kubectl get pods -n kubevirtNAME                                           READY     STATUS        RESTARTS   AGEvirt-api-6d4fc3cf8a-b2ere                      1/1       Running       0          1mvirt-controller-5d9fc8cf8b-n5trt               1/1       Running       0          1mvirt-handler-vwdjx                             1/1       Running       0          1m...</code></pre><h3 id="安装每日开发者构建"><a href="#安装每日开发者构建" class="headerlink" title="安装每日开发者构建"></a>安装每日开发者构建</h3><p>KubeVirt 每天从当前主分支发布一个开发人员构建。通过查看我们的 nightly-build-jobs可以了解上一次发布的时间。</p><p>要安装最新的开发人员版本，请运行以下命令：</p><pre><code>$ LATEST=$(curl -L https://storage.googleapis.com/kubevirt-prow/devel/nightly/release/kubevirt/kubevirt/latest)$ kubectl apply -f https://storage.googleapis.com/kubevirt-prow/devel/nightly/release/kubevirt/kubevirt/$&#123;LATEST&#125;/kubevirt-operator.yaml$ kubectl apply -f https://storage.googleapis.com/kubevirt-prow/devel/nightly/release/kubevirt/kubevirt/$&#123;LATEST&#125;/kubevirt-cr.yaml</code></pre><p>要找出此构建基于哪个提交，请运行：</p><pre><code>$ LATEST=$(curl -L https://storage.googleapis.com/kubevirt-prow/devel/nightly/release/kubevirt/kubevirt/latest)$ curl https://storage.googleapis.com/kubevirt-prow/devel/nightly/release/kubevirt/kubevirt/$&#123;LATEST&#125;/commitd358cf085b5a86cc4fa516215f8b757a4e61def2</code></pre><h3 id="实验性-ARM64-开发人员构建"><a href="#实验性-ARM64-开发人员构建" class="headerlink" title="实验性 ARM64 开发人员构建"></a>实验性 ARM64 开发人员构建</h3><p>可以像这样安装实验性 ARM64 开发人员版本：</p><pre><code>$ LATEST=$(curl -L https://storage.googleapis.com/kubevirt-prow/devel/nightly/release/kubevirt/kubevirt/latest-arm64)$ kubectl apply -f https://storage.googleapis.com/kubevirt-prow/devel/nightly/release/kubevirt/kubevirt/$&#123;LATEST&#125;/kubevirt-operator-arm64.yaml$ kubectl apply -f https://storage.googleapis.com/kubevirt-prow/devel/nightly/release/kubevirt/kubevirt/$&#123;LATEST&#125;/kubevirt-cr-arm64.yaml</code></pre><h3 id="从源头部署"><a href="#从源头部署" class="headerlink" title="从源头部署"></a>从源头部署</h3><p>请参阅开发人员入门指南 以了解如何从源代码构建和部署 KubeVirt。</p><h3 id="安装网络插件（可选）"><a href="#安装网络插件（可选）" class="headerlink" title="安装网络插件（可选）"></a>安装网络插件（可选）</h3><p>KubeVirt 本身并没有带来任何额外的网络插件，它只是允许用户使用它们。如果您想将您的虚拟机连接到多个网络（Multus CNI）或完全控制 L2（OVS CNI），您需要部署相应的网络插件。有关详细信息，请参阅 OVS CNI 安装指南。</p><blockquote><p>注意： KubeVirt Ansible网络剧本 默认安装这些插件。</p></blockquote><h3 id="限制-KubeVirt-组件节点放置"><a href="#限制-KubeVirt-组件节点放置" class="headerlink" title="限制 KubeVirt 组件节点放置"></a>限制 KubeVirt 组件节点放置</h3><p>您可以通过编辑 KubeVirt CR 来限制 KubeVirt 组件在集群节点中的放置：</p><p>KubeVirt 控制平面组件（virt-controller、virt-api）的放置由<code>KubeVirt CR</code>中的字段<code>.spec.infra.nodePlacement</code>控制。</p><p>virt-handler DaemonSet pod 的放置（以及因此调度到集群的 VM 工作负载的放置）由<code>KubeVirt CR</code>中的字段<code>.spec.workloads.nodePlacement</code>控制。</p><p>对于这些.nodePlacement对象中的每一个.affinity，可以配置.nodeSelector和子字段。 有关使用这些字段的更多信息，.tolerations请参阅API 参考中的说明。</p><p>例如，要将 virt-controller 和 virt-api pod 限制为仅在 control-plane 节点上运行：</p><pre><code>kubectl patch -n kubevirt kubevirt kubevirt --type merge --patch &#39;&#123;&quot;spec&quot;: &#123;&quot;infra&quot;: &#123;&quot;nodePlacement&quot;: &#123;&quot;nodeSelector&quot;: &#123;&quot;node-role.kubernetes.io/control-plane&quot;: &quot;&quot;&#125;&#125;&#125;&#125;&#125;&#39;</code></pre><p>要将 virt-handler pod 限制为仅在具有<code>region=primary</code>标签的节点上运行：</p><pre><code>kubectl patch -n kubevirt kubevirt kubevirt --type merge --patch &#39;&#123;&quot;spec&quot;: &#123;&quot;workloads&quot;: &#123;&quot;nodePlacement&quot;: &#123;&quot;nodeSelector&quot;: &#123;&quot;region&quot;: &quot;primary&quot;&#125;&#125;&#125;&#125;&#125;&#39;</code></pre><h3 id="安装Virtctl"><a href="#安装Virtctl" class="headerlink" title="安装Virtctl"></a>安装Virtctl</h3><pre><code>wget -O /usr/local/bin/virtctl https://github.com/kubevirt/kubevirt/releases/download/$&#123;RELEASE&#125;/virtctl-$&#123;RELEASE&#125;-linux-amd64</code></pre><!-- #endregion --><!-- #region --><h2 id="实际安装"><a href="#实际安装" class="headerlink" title="实际安装"></a>实际安装</h2><p>在C12 C13 C14上执行安装过程</p><h3 id="apply"><a href="#apply" class="headerlink" title="apply"></a>apply</h3><pre><code class="bash"># Pick an upstream version of KubeVirt to installroot@c12$ export RELEASE=v0.49.0# output</code></pre><pre><code class="bash"># Deploy the KubeVirt operatorroot@c12$ kubectl apply -f https://github.com/kubevirt/kubevirt/releases/download/$&#123;RELEASE&#125;/kubevirt-operator.yaml# outputnamespace/kubevirt createdcustomresourcedefinition.apiextensions.k8s.io/kubevirts.kubevirt.io createdpriorityclass.scheduling.k8s.io/kubevirt-cluster-critical createdclusterrole.rbac.authorization.k8s.io/kubevirt.io:operator createdserviceaccount/kubevirt-operator createdrole.rbac.authorization.k8s.io/kubevirt-operator createdrolebinding.rbac.authorization.k8s.io/kubevirt-operator-rolebinding createdclusterrole.rbac.authorization.k8s.io/kubevirt-operator createdclusterrolebinding.rbac.authorization.k8s.io/kubevirt-operator createddeployment.apps/virt-operator created</code></pre><pre><code class="bash"># Create the KubeVirt CR (instance deployment request) which triggers the actual installationroot@c12$ kubectl apply -f https://github.com/kubevirt/kubevirt/releases/download/$&#123;RELEASE&#125;/kubevirt-cr.yaml# outputkubevirt.kubevirt.io/kubevirt created</code></pre><h3 id="验证安装结果"><a href="#验证安装结果" class="headerlink" title="验证安装结果"></a>验证安装结果</h3><pre><code class="bash"># wait until all KubeVirt components are uproot@c12$ kubectl -n kubevirt wait kv kubevirt --for condition=Available# 等待一段时间error: timed out waiting for the condition on kubevirts/kubevirtroot@c12$ kubectl get pods -A...kubevirt      virt-controller-7556586574-g5jcb   1/1     Running            0          8m11skubevirt      virt-controller-7556586574-z54jk   0/1     ImagePullBackOff   0          8m11skubevirt      virt-handler-29qpt                 1/1     Running            0          8m11s...# 有个pod有问题，查看logroot@c12$ kubectl describe pod -n kubevirt virt-controller-7556586574-z54jk...  Normal   Scheduled  10m                  default-scheduler  Successfully assigned kubevirt/virt-controller-7556586574-z54jk to c13  Warning  Failed     4m40s                kubelet            Failed to pull image &quot;quay.io/kubevirt/virt-controller:v0.49.0&quot;: rpc error: code = Unknown desc = context canceled  Warning  Failed     4m40s                kubelet            Error: ErrImagePull  Normal   BackOff    4m40s                kubelet            Back-off pulling image &quot;quay.io/kubevirt/virt-controller:v0.49.0&quot;  Warning  Failed     4m40s                kubelet            Error: ImagePullBackOff  Normal   Pulling    4m28s (x2 over 10m)  kubelet            Pulling image &quot;quay.io/kubevirt/virt-controller:v0.49.0...# 镜像拉取失败，用ansible执行镜像拉取root@*$ ansible -i inventory/hosts c12,c13,c14 -m shell -a &#39;docker pull quay.io/kubevirt/virt-controller:v0.49.0&#39; -b# 再次执行,结果符合预期root@c12$ kubectl -n kubevirt wait kv kubevirt --for condition=Availablekubevirt.kubevirt.io/kubevirt condition met# 查看kubevirt状态root@c12$ kubectl get pods -n kubevirtNAME                               READY   STATUS    RESTARTS   AGEvirt-api-b9fc66c44-78bxs           1/1     Running   0          163mvirt-api-b9fc66c44-cqv7w           1/1     Running   0          163mvirt-controller-7556586574-g5jcb   1/1     Running   0          162mvirt-controller-7556586574-z54jk   1/1     Running   0          162mvirt-handler-29qpt                 1/1     Running   0          162mvirt-handler-8gv78                 1/1     Running   0          162mvirt-handler-sqnlz                 1/1     Running   0          162mvirt-operator-7c67945b69-8782n     1/1     Running   0          164mvirt-operator-7c67945b69-lsrbr     1/1     Running   0          164m</code></pre><h3 id="下载virtctl"><a href="#下载virtctl" class="headerlink" title="下载virtctl"></a>下载virtctl</h3><pre><code>root@c12$ wget -O /usr/local/bin/virtctl https://github.com/kubevirt/kubevirt/releases/download/$&#123;RELEASE&#125;/virtctl-$&#123;RELEASE&#125;-linux-amd64root@c12$ chmod +x /usr/local/bin/virtctl</code></pre><!-- #endregion --><!-- #region --><h2 id="实际使用"><a href="#实际使用" class="headerlink" title="实际使用"></a>实际使用</h2><p>现在一切准备就绪，可以继续并启动 VM。</p><h3 id="创建-Definition"><a href="#创建-Definition" class="headerlink" title="创建 Definition"></a>创建 Definition</h3><p>下面的命令将虚拟机<code>Definition(定义)</code>的 YAML 应用到我们当前的 Kubernetes 环境中，定义 VM 名称、所需资源（磁盘、CPU、内存）等。</p><pre><code>root@c12$ kubectl apply -f https://kubevirt.io/labs/manifests/vm.yamlvirtualmachine.kubevirt.io/testvm created</code></pre><p>得益于在我们的环境中启用了 KubeVirt 功能，我们正在以与创建任何其他 Kubernetes 资源相同的方式创建虚拟机。现在我们有一个虚拟机作为 Kubernetes 资源。</p><p>创建 vm 资源后，您可以使用标准的“kubectl”命令管理 VM：</p><pre><code>root@c12$ kubectl get vmsNAME     AGE   STATUS    READYtestvm   18s   Stopped   Falseroot@c12$ kubectl get vms -o yaml testvmapiVersion: kubevirt.io/v1                    kind: VirtualMachine           metadata:                 annotations:         kubectl.kubernetes.io/last-applied-configuration: |...</code></pre><p>检查是否定义了 VM（使用命令<code>kubectl get vms</code>）：</p><pre><code>root@c12$ kubectl get vmsNAME     AGE     STATUS    READYtestvm   2m21s   Stopped   False</code></pre><p>从输出中注意到 VM 尚未运行。</p><h3 id="创建-Instance"><a href="#创建-Instance" class="headerlink" title="创建 Instance"></a>创建 Instance</h3><p>要启动 VM Instance(实例)，使用 virtctl 执行如下操作：</p><pre><code>root@c12$ virtctl start testvmVM testvm was scheduled to start</code></pre><p>现在您可以再次检查 VM 状态：</p><pre><code>root@c12$ kubectl get vmsNAME     AGE   STATUS     READYtestvm   3m    Starting   False# 等待一会再次执行NAME     AGE     STATUS    READYtestvm   3m31s   Running   True</code></pre><p>VirtualMachine资源包含 VM 的Definition和Status。具有实例附加的关联资源，即VirtualMachineInstance.</p><p>虚拟机运行后，您可以检查其状态：</p><pre><code>root@c12$ kubectl get vmisNAME     AGE   PHASE     IP             NODENAME   READYtestvm   63s   Running   10.233.66.10   c14        Trueroot@c12$ kubectl get vmis -o yaml testvm# output 略</code></pre><p>准备就绪后，命令<code>kubectl get vmis</code>将打印如下内容：</p><pre><code>root@c12$ kubectl get vmisNAME     AGE    PHASE     IP             NODENAME   READYtestvm   109s   Running   10.233.66.10   c14        True</code></pre><p>访问虚拟机（串行控制台和 vnc）</p><p>现在 VM 正在运行，您可以访问其串行控制台：</p><blockquote><p>注意： ^]表示,按“CTRL”和“]”键退出控制台。</p></blockquote><pre><code># Connect to the serial consoleroot@c12$ virtctl console testvm# 显示prompt，输入用户名：&#39;cirros&#39; 密码：&#39;gocubsgo&#39;登录testvm login: cirrosPassword: $ iduid=1000(cirros) gid=1000(cirros) groups=1000(cirros)$ hostnametestvm$ </code></pre><p>在可以访问 VNC 客户端的环境中，可以使用virtctl vnc命令访问 VM 的图形控制台。</p><h3 id="关闭和清理-Definition-和-Instance"><a href="#关闭和清理-Definition-和-Instance" class="headerlink" title="关闭和清理 Definition 和 Instance"></a>关闭和清理 Definition 和 Instance</h3><p>关闭 VM 还使用以下virtctl命令：</p><pre><code>root@c12$ virtctl stop testvmVM testvm was scheduled to stoproot@c12$ kubectl get vmNAME     AGE     STATUS    READYtestvm   9m48s   Stopped   False</code></pre><p>最后，可以使用以下命令删除 VM Definition：</p><pre><code>root@c12$ kubectl delete vms testvmvirtualmachine.kubevirt.io &quot;testvm&quot; deleted</code></pre><!-- #endregion --><h2 id="总结分析"><a href="#总结分析" class="headerlink" title="总结分析"></a>总结分析</h2><p>  <strong>TODO</strong></p>]]></content>
+      
+      
+      <categories>
+          
+          <category> 04 kubernetes </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> 运维 开发 DevOps Kubevirt </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>Kubevirt实战/使用 CDI 导入并启动 VM</title>
+      <link href="/2023/09/Kubevirt002/"/>
+      <url>/2023/09/Kubevirt002/</url>
+      
+        <content type="html"><![CDATA[<h2 id="容器化数据导入器介绍"><a href="#容器化数据导入器介绍" class="headerlink" title="容器化数据导入器介绍"></a>容器化数据导入器介绍</h2><p>CDI是一个实用程序，旨在导入虚拟机映像以与 Kubevirt 一起使用。</p><p>在较高级别上，创建了 PersistentVolumeClaim (PVC)。自定义controller监视导入程序的特定声明，并在发现时启动导入过程以创建名为disk.img的原始图像，并将所需内容放入关联的 PVC。</p><p>我们将首先探索每个组件，然后我们将安装它们。在本练习中，我们创建了一个主机路径配置器和存储类。此外，我们将使用 Operator 部署 CDI 组件。</p><h3 id="安装主机路径供应商"><a href="#安装主机路径供应商" class="headerlink" title="安装主机路径供应商"></a>安装主机路径供应商</h3><p>下载 hostpath-provisioner 部署 YAML 并应用它。</p><pre><code>root@c12$ wget https://raw.githubusercontent.com/kubevirt/hostpath-provisioner/main/deploy/kubevirt-hostpath-provisioner.yamlroot@c12$ kubectl create -f kubevirt-hostpath-provisioner.yamlroot@c12$ kubectl annotate storageclass kubevirt-hostpath-provisioner storageclass.kubernetes.io/is-default-class=true</code></pre><p>验证您现在有一个默认存储类。您应该看到“kubevirt-hostpath-provisioner（默认）”</p><pre><code>root@c12$ kubectl get storageclass</code></pre><h3 id="安装-CDI"><a href="#安装-CDI" class="headerlink" title="安装 CDI"></a>安装 CDI</h3><h4 id="启动"><a href="#启动" class="headerlink" title="启动"></a>启动</h4><p>获取最新版本的 CDI 并应用启动部署的 Operator 和自定义资源定义 (CR)：</p><pre><code>root@c12$ export VERSION=$(curl -s https://github.com/kubevirt/containerized-data-importer/releases/latest | grep -o &quot;v[0-9]\.[0-9]*\.[0-9]*&quot;)</code></pre><h4 id="部署operator"><a href="#部署operator" class="headerlink" title="部署operator"></a>部署operator</h4><pre><code>root@c12$ kubectl create -f https://github.com/kubevirt/containerized-data-importer/releases/download/$VERSION/cdi-operator.yaml</code></pre><h4 id="创建CRD"><a href="#创建CRD" class="headerlink" title="创建CRD"></a>创建CRD</h4><p>创建 CRD 以触发 CDI 的operator部署：</p><pre><code>root@c12$ kubectl create -f https://github.com/kubevirt/containerized-data-importer/releases/download/$VERSION/cdi-cr.yaml</code></pre><h4 id="检查CDI状态"><a href="#检查CDI状态" class="headerlink" title="检查CDI状态"></a>检查CDI状态</h4><p>检查 CDI 部署的状态。您可以根据需要重复此命令，直到 CDI “PHASE” 显示为 “Deployed”</p><pre><code>root@c12$ kubectl get cdi -n cdi</code></pre><h4 id="查看CDI-pod"><a href="#查看CDI-pod" class="headerlink" title="查看CDI-pod"></a>查看CDI-pod</h4><p>查看已添加的“CDI”pod。</p><pre><code>root@c12$ kubectl get pods -n cdi</code></pre><h4 id="使用-CDI"><a href="#使用-CDI" class="headerlink" title="使用 CDI"></a>使用 CDI</h4><p>例如，我们将导入 Fedora34 云镜像作为 PVC 并启动使用它的虚拟机。</p><pre><code>root@c12$ cat &lt;&lt;EOF &gt; pvc_fedora.ymlapiVersion: v1kind: PersistentVolumeClaimmetadata:  name: &quot;fedora&quot;  labels:    app: containerized-data-importer  annotations:    cdi.kubevirt.io/storage.import.endpoint: &quot;https://mirror.23media.com/fedora/linux/releases/34/Cloud/x86_64/images/Fedora-Cloud-Base-34-1.2.x86_64.raw.xz&quot;    kubevirt.io/provisionOnNode: node01spec:  accessModes:  - ReadWriteOnce  resources:    requests:      storage: 5500MiEOFroot@c12$ kubectl create -f pvc_fedora.yml</code></pre><p>这将创建带有适当注释的 PVC，以便 CDI 控制器检测到它并启动导入器 pod 以收集cdi.kubevirt.io/storage.import.endpoint注释中指定的图像。</p><p>获取 pod 名称以稍后检查日志。如果 pod 尚未列出，请稍等片刻，因为 Operator 仍在执行所需的操作。</p><pre><code>root@c12$ kubectl get pod</code></pre><p>然后检查导入过程（这将是一个漫长的过程，可能需要一些时间）：</p><pre><code>root@c12$ kubectl logs -f $(kubectl get pods -o name)</code></pre><p>请注意，导入程序下载了公开可用的 Fedora Cloud qcow 映像。一旦 importer pod 完成，这个 PVC 就可以在 KubeVirt 中使用了。</p><p>如果导入器 pod 错误完成，您可能需要重试它或为 fedora 云映像指定不同的 URL。要重试，请先删除 importer pod 和 PVC，然后重新创建 PVC。</p><p>让我们创建一个使用新 PVC 的虚拟机。查看文件vm1_pvc.yml。</p><pre><code>$ wget https://kubevirt.io/labs/manifests/vm1_pvc.yml</code></pre><p>我们更改此虚拟机的 YAML 定义，以在云实例中注入用户的默认公钥。这个 Katacoda 场景提供了一个已设置 ssh 密钥的环境，因此我们将使用在 authorized_keys 文件中找到的公钥。</p><pre><code>$ PUBKEY=$(cat ~/.ssh/authorized_keys)$ sed -i &quot;s%ssh-rsa YOUR_SSH_PUB_KEY_HERE%$PUBKEY%&quot; vm1_pvc.yml</code></pre><p>现在，我们将使用修补过的 YAML 创建 VM：</p><pre><code>kubectl create -f vm1_pvc.yml</code></pre><p>这将创建并启动一个名为 vm1 的虚拟机。我们可以使用以下命令来检查我们的虚拟机是否正在运行，并且可以gather its IP. 您正在寻找virt-launcherpod 旁边的 IP 地址。</p><pre><code>kubectl get pod -o wide</code></pre><p>等待虚拟机启动并可以登录。您可以通过控制台监控其进度。VM 启动的速度取决于是否使用裸机硬件。使用嵌套虚拟化时速度要慢得多，如果您在云提供商的实例上完成本实验，则可能会出现这种情况。</p><p>从这里开始，有一些在玩虚拟机，等到它启动（您可以检查控制台以查看启动进度）</p><p>最后，我们将像普通用户一样连接到 vm1 虚拟机 (VM)，即通过 ssh。这可以通过 ssh 到收集的 IP 来实现。</p><p>检查IP地址：</p><pre><code>controlplane $ kubectl get vmisNAME      AGE       PHASE     IP           NODENAMEtestvm    1m        Running   10.32.0.11   controlplane</code></pre><p>现在，通过 SSH 连接</p><pre><code>ssh fedora@10.32.0.11</code></pre><p>结束。</p>]]></content>
+      
+      
+      <categories>
+          
+          <category> 04 kubernetes </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> 运维 开发 DevOps Kubevirt </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>kubernetes运维/搭建单点Kubernetes cluster</title>
+      <link href="/2023/09/kubernetes001/"/>
+      <url>/2023/09/kubernetes001/</url>
+      
+        <content type="html"><![CDATA[<h2 id="配置与环境"><a href="#配置与环境" class="headerlink" title="配置与环境"></a>配置与环境</h2><pre><code>硬件: 4Cpu 16G 1T Nvidia-GTX-1650OS: Ubuntu-20.04</code></pre><p><a href="https://computingforgeeks.com/deploy-kubernetes-cluster-on-ubuntu-with-kubeadm/">参考链接</a></p><h2 id="执行步骤"><a href="#执行步骤" class="headerlink" title="执行步骤"></a>执行步骤</h2><h3 id="升级系统组件到最新组件"><a href="#升级系统组件到最新组件" class="headerlink" title="升级系统组件到最新组件"></a>升级系统组件到最新组件</h3><pre><code class="shell">$ sudo apt update$ sudo apt -y upgrade$ sudo systemctl reboot</code></pre><h3 id="安装-kubelet-kubeadm-kubectl"><a href="#安装-kubelet-kubeadm-kubectl" class="headerlink" title="安装 kubelet kubeadm kubectl"></a>安装 <code>kubelet kubeadm kubectl</code></h3><p>配置安装源</p><pre><code class="shell">$ sudo apt update$ sudo apt -y install curl apt-transport-https$ curl -s https://packages.cloud.google.com/apt/doc/apt-key.gpg | sudo apt-key add -$ echo &quot;deb https://apt.kubernetes.io/ kubernetes-xenial main&quot; | sudo tee /etc/apt/sources.list.d/kubernetes.list</code></pre><p>安装包</p><pre><code class="shell">$ sudo apt update$ sudo apt -y install vim git curl wget kubelet kubeadm kubectl$ sudo apt-mark hold kubelet kubeadm kubectl</code></pre><p>确认版本</p><pre><code class="shell">$ kubectl version --client &amp;&amp; kubeadm versionClient Version: version.Info&#123;Major:&quot;1&quot;, Minor:&quot;21&quot;, GitVersion:&quot;v1.21.0&quot;, GitCommit:&quot;cb303e613a121a29364f75cc67d3d580833a7479&quot;, GitTreeState:&quot;clean&quot;, BuildDate:&quot;2021-04-08T16:31:21Z&quot;, GoVersion:&quot;go1.16.1&quot;, Compiler:&quot;gc&quot;, Platform:&quot;linux/amd64&quot;&#125;kubeadm version: &amp;version.Info&#123;Major:&quot;1&quot;, Minor:&quot;21&quot;, GitVersion:&quot;v1.21.0&quot;, GitCommit:&quot;cb303e613a121a29364f75cc67d3d580833a7479&quot;, GitTreeState:&quot;clean&quot;, BuildDate:&quot;2021-04-08T16:30:03Z&quot;, GoVersion:&quot;go1.16.1&quot;, Compiler:&quot;gc&quot;, Platform:&quot;linux/amd64&quot;&#125;</code></pre><h3 id="配置"><a href="#配置" class="headerlink" title="配置"></a>配置</h3><p>关闭 swap 分区</p><p>配置sysctl</p><pre><code class="shell">$ sudo modprobe overlay$ sudo modprobe br_netfilter$ sudo tee /etc/sysctl.d/kubernetes.conf&lt;&lt;EOFnet.bridge.bridge-nf-call-ip6tables = 1net.bridge.bridge-nf-call-iptables = 1net.ipv4.ip_forward = 1EOF$ sudo sysctl --system</code></pre><h3 id="安装容器引擎-docker"><a href="#安装容器引擎-docker" class="headerlink" title="安装容器引擎-docker"></a>安装容器引擎-docker</h3><h3 id="初始化节点"><a href="#初始化节点" class="headerlink" title="初始化节点"></a>初始化节点</h3><p>确保br_netfilter mod加载成功</p><pre><code class="shell">$ lsmod | grep br_netfilterbr_netfilter           28672  0bridge                192512  1 br_netfilter</code></pre><p>启动kubelet</p><pre><code class="shell">$ sudo systemctl enable kubelet</code></pre><p>拉取镜像</p><pre><code class="shell">$ sudo kubeadm config images pull</code></pre><p>kubeadm 初始化</p><pre><code class="shell">$ sudo kubeadm init \  --pod-network-cidr=192.168.3.0/24 \  --control-plane-endpoint=k8s.grepcode.cn</code></pre><h3 id="访问权限配置"><a href="#访问权限配置" class="headerlink" title="访问权限配置"></a>访问权限配置</h3><pre><code class="shell">$ mkdir -p $HOME/.kube$ sudo cp -i /etc/kubernetes/admin.conf $HOME/.kube/config$ sudo chown $(id -u):$(id -g) $HOME/.kube/config</code></pre><p>添加自动补全</p><pre><code class="shell">$ sudo bash -c &#39;kubectl completion bash &gt;/etc/bash_completion.d/kubectl&#39;</code></pre><h3 id="安装网络组件"><a href="#安装网络组件" class="headerlink" title="安装网络组件"></a>安装网络组件</h3><pre><code class="shell">$ kubectl apply -f https://docs.projectcalico.org/manifests/calico.yaml</code></pre><h3 id="设置master非污点"><a href="#设置master非污点" class="headerlink" title="设置master非污点"></a>设置master非污点</h3><pre><code class="shell">$ kubectl taint node h2 node-role.kubernetes.io/master-</code></pre>]]></content>
+      
+      
+      <categories>
+          
+          <category> 04 kubernetes </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> 运维 开发 DevOps 搭建环境 </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>计划说明</title>
+      <link href="/2023/09/blueking001/"/>
+      <url>/2023/09/blueking001/</url>
+      
+        <content type="html"><![CDATA[<h2 id="缘起"><a href="#缘起" class="headerlink" title="缘起"></a>缘起</h2><p>在公司使用蓝鲸7.0已经一年了，个人觉得蓝鲸在使用上，有其突出的地方，也有不足的地方。从优势上说，依托开源和腾讯，有很好的社区支持。不足是组件较多，学习成本较高，个性化需求不能及时满足。这里将自己使用蓝鲸的经验，转化成一个快速接入生产的实际案例。让后来者能快速形成自己的方法论。再次强调，是自己的方法论。没有一个方法可以解决所有的问题。形成方法论过程中的个人思考，才是自己的立身之本。再次强调，适合生产使用的，就是最合适的，不需要听说蓝鲸好用就选型蓝鲸。但是一定要自己搭建一个环境自己试一试。</p><h2 id="环境说明"><a href="#环境说明" class="headerlink" title="环境说明"></a>环境说明</h2><p>这里只是基于蓝鲸7的学习，蓝鲸6不在讨论范围。</p><table><thead><tr><th>硬件资源</th><th>操作系统</th></tr></thead><tbody><tr><td>24c128G</td><td>Ubuntu 20.04</td></tr></tbody></table><p>K8S信息</p><pre><code class="bash">kubectl get nodesNAME   STATUS   ROLES                         AGE   VERSIONne     Ready    control-plane,master,worker   18d   v1.23.17</code></pre><p> <code>v1.23.17</code> 这里不知道官方推荐是多少</p><p> 如何搭建k8s集群，网上资料很多，可自行搜索。</p><p> 依赖项说明到此结束。</p>]]></content>
+      
+      
+      <categories>
+          
+          <category> 01 蓝鲸计划 </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> 运维 开发 DevOps 蓝鲸 blueking </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>运维开发</title>
+      <link href="/2023/09/devops001/"/>
+      <url>/2023/09/devops001/</url>
+      
+        <content type="html"><![CDATA[<p>运维小工具集合</p>]]></content>
+      
+      
+      <categories>
+          
+          <category> 03 devops </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> 运维 开发 DevOps </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>环境搭建与测试项目</title>
+      <link href="/2023/09/Kubebuilder001/"/>
+      <url>/2023/09/Kubebuilder001/</url>
+      
+        <content type="html"><![CDATA[<p><a href="https://book.kubebuilder.io/quick-start.html">参考地址-helloworld</a></p><p><a href="https://juejin.cn/post/6844903952241131534">中文说明1</a></p><h2 id="安装"><a href="#安装" class="headerlink" title="安装"></a>安装</h2><p>安装 kubebuilder</p><pre><code class="shell">os=$(go env GOOS)arch=$(go env GOARCH)# 下载 kubebuilder 并解压到 tmp 目录中curl -L -o kubebuilder https://go.kubebuilder.io/dl/latest/$(go env GOOS)/$(go env GOARCH)chmod +x kubebuilder &amp;&amp; mv kubebuilder /usr/local/bin</code></pre><h2 id="创建一个项目"><a href="#创建一个项目" class="headerlink" title="创建一个项目"></a>创建一个项目</h2><pre><code class="shell">$ mkdir $GOPATH/src/kubehello$ cd $GOPATH/src/kubehello$ kubebuilder init --domain kubehello.local --repo kubehello.local/guestbook</code></pre><h2 id="配置Registry的密钥"><a href="#配置Registry的密钥" class="headerlink" title="配置Registry的密钥"></a>配置Registry的密钥</h2><pre><code class="shell">$ kubectl create secret docker-registry regcred --namespace=kubehello-system --docker-server=**** --docker-username=**** --docker-password=**** --docker-email=stdhi@grepcode.cn</code></pre><h2 id="创建一个-API"><a href="#创建一个-API" class="headerlink" title="创建一个 API"></a>创建一个 API</h2><pre><code class="shell">$ kubebuilder create api --group webapp --version v1 --kind Guestbook</code></pre><h2 id="测试"><a href="#测试" class="headerlink" title="测试"></a>测试</h2><pre><code class="shell">$ make install$ make run</code></pre><h2 id="配置Registry授权"><a href="#配置Registry授权" class="headerlink" title="配置Registry授权"></a>配置Registry授权</h2><p>编辑 <code>./config/manager/manager.yaml</code></p><pre><code class="shell">...    spec:      securityContext:        runAsNonRoot: true      imagePullSecrets:        - name: regcred      containers:      - command:...</code></pre><h2 id="安装Resource"><a href="#安装Resource" class="headerlink" title="安装Resource"></a>安装Resource</h2><pre><code class="shell">$ kubectl apply -f config/samples/</code></pre><h2 id="在Cluster运行"><a href="#在Cluster运行" class="headerlink" title="在Cluster运行"></a>在Cluster运行</h2><pre><code># 打包Example镜像$ make docker-build docker-push IMG=hm.grepcode.cn:55582/guestbook:latest# 部署Example镜像$ make deploy IMG=hm.grepcode.cn:55582/guestbook:latest</code></pre><h2 id="删除CRDs"><a href="#删除CRDs" class="headerlink" title="删除CRDs"></a>删除CRDs</h2><pre><code>$ make uninstall</code></pre><h2 id="卸载Controller"><a href="#卸载Controller" class="headerlink" title="卸载Controller"></a>卸载Controller</h2><pre><code>$ make undeploy</code></pre>]]></content>
+      
+      
+      <categories>
+          
+          <category> 02 云原生 </category>
+          
+          <category> kubebuilder </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> 运维 开发 DevOps Kubebuilder </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>cert-manager使用手册</title>
+      <link href="/2023/09/kubegems001/"/>
+      <url>/2023/09/kubegems001/</url>
+      
+        <content type="html"><![CDATA[<h3 id="1-1-参考文档"><a href="#1-1-参考文档" class="headerlink" title="1.1 参考文档"></a>1.1 参考文档</h3><p><a href="https://cert-manager.io/docs/">cert-manager官方文档</a></p><pre><code>证书管理器cert-manager 将证书和证书颁发者添加为 Kubernetes 集群中的资源类型，并简化了获取、更新和使用这些证书的过程。它可以从各种受支持的来源颁发证书，包括 Let&#39;s Encrypt、HashiCorp Vault 和 Venafi 以及私有 PKI。它将确保证书有效且最新，并尝试在到期前的配置时间续订证书。它大致基于 kube-lego 的工作，并借鉴了其他类似项目（例如 kube-cert-manager）的一些智慧。解释证书管理器架构的高级概述图</code></pre><p><img src="/images/kubegems001_01.png" alt="高级概述图"></p><h3 id="1-2-如何安装"><a href="#1-2-如何安装" class="headerlink" title="1.2 如何安装"></a>1.2 如何安装</h3><p>目前提供三种安装模式</p><pre><code>1. kubectl apply2. helm3. OperatorHub</code></pre><p>由于我们采用了Kubegems，这里我们用kubegems的一键安装：</p><p><img src="/images/kubegems001_02.png" alt="一键安装"></p><p>安装说明：</p><p>由于笔者采用的Kubegems的cert-manager是1.8.0版本，按照官方文档，建议K8S为<code>1.24</code></p><h3 id="1-3-CD-持续发布"><a href="#1-3-CD-持续发布" class="headerlink" title="1.3 CD 持续发布"></a>1.3 CD 持续发布</h3><p>你知道如何配置你的 Cert-Manager 设置，并希望自动化这个过程。</p><p>📖 helm：你可以直接使用 Cert-Manager Helm 图表与诸如 Flux、ArgoCD 和 Anthos 等系统一起使用。</p><p>📖 helm template：你可以使用 helm template 生成自定义的 Cert-Manager 安装清单。请参阅使用 helm template 输出 YAML 获取更多详细信息。然后，你可以将这个模板化的 Cert-Manager 清单传输到你首选的部署工具中。</p><h3 id="1-4-验证安装"><a href="#1-4-验证安装" class="headerlink" title="1.4 验证安装"></a>1.4 验证安装</h3><ol><li><p>确认安装了<a href="https://cert-manager.io/docs/reference/cmctl/#installation">cmctl</a></p><p> 如果没有安装，大概流程如下：</p><pre><code class="bash">$ OS=$(go env GOOS); ARCH=$(go env GOARCH); curl -fsSL -o cmctl.tar.gz https://github.com/cert-manager/cert-manager/releases/latest/download/cmctl-$OS-$ARCH.tar.gz$ tar xzf cmctl.tar.gz$ sudo mv cmctl /usr/local/bin$ cmctl helpcmctl is a CLI tool manage and configure cert-manager resources for KubernetesUsage: cmctl [command]Available Commands:approve      Approve a CertificateRequestcheck        Check cert-manager componentscompletion   Generate completion scripts for the cert-manager CLIconvert      Convert cert-manager config files between different API versionscreate       Create cert-manager resourcesdeny         Deny a CertificateRequestexperimental Interact with experimental featureshelp         Help about any commandinspect      Get details on certificate related resourcesrenew        Mark a Certificate for manual renewalstatus       Get details on current status of cert-manager resourcesupgrade      Tools that assist in upgrading cert-managerversion      Print the cert-manager CLI version and the deployed cert-manager versionFlags:-h, --help                           help for cmctl    --log-flush-frequency duration   Maximum number of seconds between log flushes (default 5s)Use &quot;cmctl [command] --help&quot; for more information about a command.</code></pre></li></ol><blockquote><p style="color:red">试一试搞个自动化证书</p></blockquote><h3 id="2-1"><a href="#2-1" class="headerlink" title="2.1"></a>2.1</h3><p>   1. </p>]]></content>
+      
+      
+      <categories>
+          
+          <category> 02 云原生 </category>
+          
+          <category> kubegems </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> 运维 开发 DevOps Kubegems 证书 cert-manager </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>瑶琴</title>
+      <link href="/2022/01/poem001/"/>
+      <url>/2022/01/poem001/</url>
+      
+        <content type="html"><![CDATA[<pre><code>    一点清酒润入心，两腮微红似动情。     欲问瑶琴几多阙，闲赋三百与谁听？</code></pre>]]></content>
+      
+      
+      <categories>
+          
+          <category> 99 诗词 </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> 诗词 </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>整理归纳笔记</title>
+      <link href="/2021/03/notes/"/>
+      <url>/2021/03/notes/</url>
+      
+        <content type="html"><![CDATA[<p>整理归纳<a href="https://pages.grepcode.cn/">学习笔记</a></p>]]></content>
+      
+      
+      
+        <tags>
+            
+            <tag> 笔记 note 整理 </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+  
+  
+</search>

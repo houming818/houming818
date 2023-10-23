@@ -1,0 +1,416 @@
+<!DOCTYPE html>
+<html lang="zh-Hans">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 5.4.2">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" integrity="sha256-CTSx/A06dm1B063156EVh15m6Y67pAjZZaQc89LLSrU=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"www.grepcode.cn","root":"/","images":"/images","scheme":"Gemini","darkmode":false,"version":"8.18.2","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":{"enable":false,"style":null},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}","hits_time":"${hits} results found in ${time} ms","hits":"${hits} results found"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="前言项目目的本教程应该带您（几乎）了解 Kubebuilder 的所有复杂性，从简单开始，逐步构建功能非常齐全的东西。 参考链接项目原链接 案例源码 参考说明 开始搭建我们的项目确保已经完整运行 [Kuberbuilder实战] 环境搭建与测试项目 ,才能开始如下过程。 初始化# we&#39;ll use a domain of tutorial.kubebuilder.local, # so">
+<meta property="og:type" content="article">
+<meta property="og:title" content="构建CronJob">
+<meta property="og:url" content="https://www.grepcode.cn/2023/09/Kubebuilder002/index.html">
+<meta property="og:site_name" content="houming818">
+<meta property="og:description" content="前言项目目的本教程应该带您（几乎）了解 Kubebuilder 的所有复杂性，从简单开始，逐步构建功能非常齐全的东西。 参考链接项目原链接 案例源码 参考说明 开始搭建我们的项目确保已经完整运行 [Kuberbuilder实战] 环境搭建与测试项目 ,才能开始如下过程。 初始化# we&#39;ll use a domain of tutorial.kubebuilder.local, # so">
+<meta property="og:locale">
+<meta property="article:published_time" content="2023-09-22T06:00:00.000Z">
+<meta property="article:modified_time" content="2023-09-24T06:47:29.354Z">
+<meta property="article:author" content="houming818">
+<meta property="article:tag" content="运维 开发 DevOps Kubebuilder">
+<meta name="twitter:card" content="summary">
+
+
+<link rel="canonical" href="https://www.grepcode.cn/2023/09/Kubebuilder002/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-Hans","comments":true,"permalink":"https://www.grepcode.cn/2023/09/Kubebuilder002/","path":"2023/09/Kubebuilder002/","title":"构建CronJob"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>构建CronJob | houming818</title>
+  <!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-NMMN9CLG7N"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-NMMN9CLG7N');
+</script>
+
+
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+<link rel="alternate" href="/atom.xml" title="houming818" type="application/atom+xml">
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">houming818</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">coding and thinking</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="Search" role="button">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>About</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags</a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories</a></li><li class="menu-item menu-item-sitemap"><a href="/sitemap.xml" rel="section"><i class="fa fa-sitemap fa-fw"></i>Sitemap</a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>Search
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup"><div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off" maxlength="80"
+           placeholder="Searching..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close" role="button">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div class="search-result-container no-result">
+  <div class="search-result-icon">
+    <i class="fa fa-spinner fa-pulse fa-5x"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%89%8D%E8%A8%80"><span class="nav-number">1.</span> <span class="nav-text">前言</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%A1%B9%E7%9B%AE%E7%9B%AE%E7%9A%84"><span class="nav-number">1.1.</span> <span class="nav-text">项目目的</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%8F%82%E8%80%83%E9%93%BE%E6%8E%A5"><span class="nav-number">1.2.</span> <span class="nav-text">参考链接</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%BC%80%E5%A7%8B"><span class="nav-number">2.</span> <span class="nav-text">开始</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%90%AD%E5%BB%BA%E6%88%91%E4%BB%AC%E7%9A%84%E9%A1%B9%E7%9B%AE"><span class="nav-number">2.1.</span> <span class="nav-text">搭建我们的项目</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%88%9D%E5%A7%8B%E5%8C%96"><span class="nav-number">2.1.1.</span> <span class="nav-text">初始化</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%A1%B9%E7%9B%AE%E6%9C%89%E4%BB%80%E4%B9%88"><span class="nav-number">2.2.</span> <span class="nav-text">项目有什么</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%BB%BA%E8%AE%BE%E5%9F%BA%E7%A1%80%E8%AE%BE%E6%96%BD"><span class="nav-number">2.3.</span> <span class="nav-text">建设基础设施</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%90%AF%E5%8A%A8%E9%85%8D%E7%BD%AE"><span class="nav-number">2.4.</span> <span class="nav-text">启动配置</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%85%A5%E5%8F%A3%E7%82%B9"><span class="nav-number">2.5.</span> <span class="nav-text">入口点</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%AE%80%E5%8D%95%E8%AF%B4%E6%98%8E"><span class="nav-number">2.6.</span> <span class="nav-text">简单说明</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%9F%BA%E6%9C%AC%E6%A6%82%E5%BF%B5"><span class="nav-number">2.7.</span> <span class="nav-text">基本概念</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%B7%BB%E5%8A%A0%E6%96%B0%E7%9A%84API"><span class="nav-number">2.8.</span> <span class="nav-text">添加新的API</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%AE%BE%E8%AE%A1API"><span class="nav-number">2.9.</span> <span class="nav-text">设计API</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%8E%A7%E5%88%B6%E5%99%A8%E4%B8%AD%E6%9C%89%E4%BB%80%E4%B9%88"><span class="nav-number">2.10.</span> <span class="nav-text">控制器中有什么</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%AE%9E%E7%8E%B0%E6%8E%A7%E5%88%B6%E5%99%A8"><span class="nav-number">2.11.</span> <span class="nav-text">实现控制器</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%AE%9E%E7%8E%B0%E9%BB%98%E8%AE%A4-%E9%AA%8C%E8%AF%81-webhook"><span class="nav-number">2.12.</span> <span class="nav-text">实现默认&#x2F;验证 webhook</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%BF%90%E8%A1%8C%E5%92%8C%E9%83%A8%E7%BD%B2%E6%8E%A7%E5%88%B6%E5%99%A8"><span class="nav-number">2.13.</span> <span class="nav-text">运行和部署控制器</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E9%83%A8%E7%BD%B2%E8%AF%81%E4%B9%A6%E7%AE%A1%E7%90%86%E5%99%A8"><span class="nav-number">2.13.1.</span> <span class="nav-text">部署证书管理器</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E9%83%A8%E7%BD%B2%E5%87%86%E5%85%A5-Webhook"><span class="nav-number">2.13.2.</span> <span class="nav-text">部署准入 Webhook</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%BC%96%E5%86%99%E6%8E%A7%E5%88%B6%E5%99%A8%E6%B5%8B%E8%AF%95"><span class="nav-number">2.14.</span> <span class="nav-text">编写控制器测试</span></a></li></ol></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="houming818"
+      src="/images/logo.jpg">
+  <p class="site-author-name" itemprop="name">houming818</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">15</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">7</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">11</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
+</div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-Hans">
+    <link itemprop="mainEntityOfPage" href="https://www.grepcode.cn/2023/09/Kubebuilder002/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/logo.jpg">
+      <meta itemprop="name" content="houming818">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="houming818">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="构建CronJob | houming818">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          构建CronJob
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">Posted on</span>
+
+      <time title="Created: 2023-09-22 14:00:00" itemprop="dateCreated datePublished" datetime="2023-09-22T14:00:00+08:00">2023-09-22</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">Edited on</span>
+      <time title="Modified: 2023-09-24 14:47:29" itemprop="dateModified" datetime="2023-09-24T14:47:29+08:00">2023-09-24</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">In</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/02-%E4%BA%91%E5%8E%9F%E7%94%9F/" itemprop="url" rel="index"><span itemprop="name">02 云原生</span></a>
+        </span>
+          , 
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/02-%E4%BA%91%E5%8E%9F%E7%94%9F/kubebuilder/" itemprop="url" rel="index"><span itemprop="name">kubebuilder</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><h3 id="项目目的"><a href="#项目目的" class="headerlink" title="项目目的"></a>项目目的</h3><p>本教程应该带您（几乎）了解 Kubebuilder 的所有复杂性，从简单开始，逐步构建功能非常齐全的东西。</p>
+<h3 id="参考链接"><a href="#参考链接" class="headerlink" title="参考链接"></a>参考链接</h3><p><a target="_blank" rel="noopener" href="https://book.kubebuilder.io/cronjob-tutorial/cronjob-tutorial.html">项目原链接</a></p>
+<p><a target="_blank" rel="noopener" href="https://github.com/kubernetes-sigs/kubebuilder/tree/master/docs/book/src/cronjob-tutorial/testdata">案例源码</a></p>
+<p><a target="_blank" rel="noopener" href="https://juejin.cn/post/6844903952241131534">参考说明</a></p>
+<h2 id="开始"><a href="#开始" class="headerlink" title="开始"></a>开始</h2><h3 id="搭建我们的项目"><a href="#搭建我们的项目" class="headerlink" title="搭建我们的项目"></a>搭建我们的项目</h3><p>确保已经完整运行 <a href="https://www.grepcode.cn/2023/Kubebuilder001/"><code>[Kuberbuilder实战] 环境搭建与测试项目</code></a> ,才能开始如下过程。</p>
+<h4 id="初始化"><a href="#初始化" class="headerlink" title="初始化"></a>初始化</h4><pre><code class="shell"># we&#39;ll use a domain of tutorial.kubebuilder.local,
+# so all API groups will be &lt;group&gt;.tutorial.kubebuilder.local.
+$ kubebuilder init --domain tutorial.kubebuilder.local
+</code></pre>
+<h3 id="项目有什么"><a href="#项目有什么" class="headerlink" title="项目有什么"></a>项目有什么</h3><p><a target="_blank" rel="noopener" href="https://book.kubebuilder.io/cronjob-tutorial/basic-project.html">参考链接</a></p>
+<h3 id="建设基础设施"><a href="#建设基础设施" class="headerlink" title="建设基础设施"></a>建设基础设施</h3><ul>
+<li><code>go.mod</code>：与我们的项目匹配的新 Go 模块，具有基本依赖项</li>
+<li><code>Makefile</code>：为构建和部署控制器制定目标</li>
+<li><code>PROJECT</code>：用于搭建新组件的 Kubebuilder 元数据</li>
+</ul>
+<h3 id="启动配置"><a href="#启动配置" class="headerlink" title="启动配置"></a>启动配置</h3><h3 id="入口点"><a href="#入口点" class="headerlink" title="入口点"></a>入口点</h3><p><code>$ vim main.go</code></p>
+<blockquote>
+<p> Using RBAC Authorization的 <a target="_blank" rel="noopener" href="https://kubernetes.io/docs/reference/access-authn-authz/rbac/">kubernetes 文档</a></p>
+</blockquote>
+<h3 id="简单说明"><a href="#简单说明" class="headerlink" title="简单说明"></a>简单说明</h3><p>我们的包从一些基本的导入开始。特别：</p>
+<ul>
+<li>核心控制器运行时库</li>
+<li>默认的控制器运行时日志记录，Zap（稍后会详细介绍）</li>
+</ul>
+<p>每组控制器都需要一个 Scheme，它提供 Kinds 与其对应的 Go 类型之间的映射。</p>
+<p>在编写 API 定义时，我们将更多地讨论 Kinds，因此请记住这一点以备后用。</p>
+<p>此时，我们的主要功能相当简单：</p>
+<ul>
+<li><p>我们为指标设置了一些基本标志。</p>
+</li>
+<li><p>我们实例化一个 manager，它跟踪运行我们所有的控制器，以及设置共享缓存和客户端到 API 服务器（注意我们将我们的 Scheme 告诉了 manager）。</p>
+</li>
+<li><p>我们运行我们的管理器，它依次运行我们所有的控制器和网络钩子。管理器设置为运行，直到它收到正常关闭信号。这样，当我们在 Kubernetes 上运行时，我们的行为会很好地终止 pod。</p>
+</li>
+</ul>
+<p>虽然我们还没有任何东西可以运行，但请记住该+kubebuilder:scaffold:builder评论在哪里 ——那里很快就会变得有趣。</p>
+<p>您的项目范围更改为单个命名空间。在这种情况下，还建议通过将默认的 ClusterRole 和 ClusterRoleBinding 分别替换为 Role 和 RoleBinding 来限制对这个命名空间提供的授权。</p>
+<h3 id="基本概念"><a href="#基本概念" class="headerlink" title="基本概念"></a>基本概念</h3><p>当我们谈论 Kubernetes 中的 API 时，我们经常使用 4 个术语：<code>组 groups</code>、<code>版本 versions</code>、<code>种类 kinds</code>和<code>资源 resources</code>。</p>
+<p>Kubernetes 中的API <code>组</code>只是相关功能的集合,这些版本允许我们随着时间的推移改变 API 的工作方式</p>
+<p>每个 API group-version 包含一个或多个 API 类型，我们称之为 Kinds。资源resources只是 API 中 Kind 的使用。</p>
+<p>对于 CRD，每个 Kind 将对应一个资源。</p>
+<h3 id="添加新的API"><a href="#添加新的API" class="headerlink" title="添加新的API"></a>添加新的API</h3><pre><code class="shell">$ kubebuilder create api --group batch --version v1 --kind CronJob
+</code></pre>
+<h3 id="设计API"><a href="#设计API" class="headerlink" title="设计API"></a>设计API</h3><h3 id="控制器中有什么"><a href="#控制器中有什么" class="headerlink" title="控制器中有什么"></a>控制器中有什么</h3><p>控制器的工作是确保对于任何给定对象，全局的实际状态（集群状态和潜在的外部状态，例如为 Kubelet 运行容器或为云提供商运行负载均衡器）与对象中的所需状态相匹配。 这个过程称作 <code>reconciling</code></p>
+<blockquote>
+<p>It’s a controller’s job to ensure that, for any given object, the actual state of the world (both the cluster state, and potentially external state like running containers for Kubelet or loadbalancers for a cloud provider) matches the desired state in the object</p>
+</blockquote>
+<h3 id="实现控制器"><a href="#实现控制器" class="headerlink" title="实现控制器"></a>实现控制器</h3><p>梳理清楚控制器需要做的事情(<strong>书写Controller的第一步</strong>)</p>
+<ol>
+<li><p>加载命名的 CronJob</p>
+</li>
+<li><p>列出所有活动作业，并更新状态</p>
+</li>
+<li><p>根据历史限制清理旧作业</p>
+</li>
+<li><p>检查我们是否被暂停（如果我们被暂停，请不要做任何其他事情）</p>
+</li>
+<li><p>获取下一次预定运行</p>
+</li>
+<li><p>如果新作业按计划运行，没有超过截止日期，并且没有被我们的并发策略阻止，则运行新作业</p>
+</li>
+<li><p>当我们看到正在运行的作业（自动完成）或者是下一次计划运行的时间时重新排队。</p>
+</li>
+</ol>
+<h3 id="实现默认-验证-webhook"><a href="#实现默认-验证-webhook" class="headerlink" title="实现默认/验证 webhook"></a>实现默认/验证 webhook</h3><h3 id="运行和部署控制器"><a href="#运行和部署控制器" class="headerlink" title="运行和部署控制器"></a>运行和部署控制器</h3><h4 id="部署证书管理器"><a href="#部署证书管理器" class="headerlink" title="部署证书管理器"></a>部署证书管理器</h4><h4 id="部署准入-Webhook"><a href="#部署准入-Webhook" class="headerlink" title="部署准入 Webhook"></a>部署准入 Webhook</h4><h3 id="编写控制器测试"><a href="#编写控制器测试" class="headerlink" title="编写控制器测试"></a>编写控制器测试</h3>
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/%E8%BF%90%E7%BB%B4-%E5%BC%80%E5%8F%91-DevOps-Kubebuilder/" rel="tag"># 运维 开发 DevOps Kubebuilder</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2023/09/Kubebuilder003/" rel="prev" title="OAM学习笔记x01">
+                  <i class="fa fa-angle-left"></i> OAM学习笔记x01
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2023/09/blueking002/" rel="next" title="搭建蓝鲸">
+                  搭建蓝鲸 <i class="fa fa-angle-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2023</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">houming818</span>
+  </div>
+  <div class="powered-by">Powered by <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/" rel="noopener" target="_blank">NexT.Gemini</a>
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="back-to-top" role="button" aria-label="Back to top">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/next-boot.js"></script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-generator-searchdb/1.4.1/search.js" integrity="sha256-1kfA5uHPf65M5cphT2dvymhkuyHPQp5A53EGZOnOLmc=" crossorigin="anonymous"></script>
+<script src="/js/third-party/search/local-search.js"></script>
+
+
+
+
+
+
+
+  
+
+
+
+
+
+</body>
+</html>

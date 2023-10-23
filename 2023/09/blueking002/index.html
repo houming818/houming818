@@ -1,0 +1,458 @@
+<!DOCTYPE html>
+<html lang="zh-Hans">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 5.4.2">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" integrity="sha256-CTSx/A06dm1B063156EVh15m6Y67pAjZZaQc89LLSrU=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"www.grepcode.cn","root":"/","images":"/images","scheme":"Gemini","darkmode":false,"version":"8.18.2","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":{"enable":false,"style":null},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}","hits_time":"${hits} results found in ${time} ms","hits":"${hits} results found"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="参考链接 准备中控机  快速部署基础套餐   过程说明蓝鲸基础套餐的部署过程大致可以分为 5 个阶段： 1. 完善配置文件 2. 部署存储服务 3. 部署后台服务 4. 完善 SaaS 运行环境 5. 部署 SaaS：流程服务和标准运维  详细内容，从参考文件一条条看。 总结：  #### 准备工作 ####  $ mkdir -p ~&#x2F;bin&#x2F;                       $ c">
+<meta property="og:type" content="article">
+<meta property="og:title" content="搭建蓝鲸">
+<meta property="og:url" content="https://www.grepcode.cn/2023/09/blueking002/index.html">
+<meta property="og:site_name" content="houming818">
+<meta property="og:description" content="参考链接 准备中控机  快速部署基础套餐   过程说明蓝鲸基础套餐的部署过程大致可以分为 5 个阶段： 1. 完善配置文件 2. 部署存储服务 3. 部署后台服务 4. 完善 SaaS 运行环境 5. 部署 SaaS：流程服务和标准运维  详细内容，从参考文件一条条看。 总结：  #### 准备工作 ####  $ mkdir -p ~&#x2F;bin&#x2F;                       $ c">
+<meta property="og:locale">
+<meta property="og:image" content="https://www.grepcode.cn/images/blueking002_01.png">
+<meta property="article:published_time" content="2023-09-22T16:00:00.000Z">
+<meta property="article:modified_time" content="2023-10-07T06:25:15.695Z">
+<meta property="article:author" content="houming818">
+<meta property="article:tag" content="运维 开发 DevOps 蓝鲸 ubuntu blueking 搭建">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://www.grepcode.cn/images/blueking002_01.png">
+
+
+<link rel="canonical" href="https://www.grepcode.cn/2023/09/blueking002/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-Hans","comments":true,"permalink":"https://www.grepcode.cn/2023/09/blueking002/","path":"2023/09/blueking002/","title":"搭建蓝鲸"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>搭建蓝鲸 | houming818</title>
+  <!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-NMMN9CLG7N"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-NMMN9CLG7N');
+</script>
+
+
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+<link rel="alternate" href="/atom.xml" title="houming818" type="application/atom+xml">
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">houming818</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">coding and thinking</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="Search" role="button">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>About</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags</a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories</a></li><li class="menu-item menu-item-sitemap"><a href="/sitemap.xml" rel="section"><i class="fa fa-sitemap fa-fw"></i>Sitemap</a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>Search
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup"><div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off" maxlength="80"
+           placeholder="Searching..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close" role="button">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div class="search-result-container no-result">
+  <div class="search-result-icon">
+    <i class="fa fa-spinner fa-pulse fa-5x"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8F%82%E8%80%83%E9%93%BE%E6%8E%A5"><span class="nav-number">1.</span> <span class="nav-text">参考链接</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%BF%87%E7%A8%8B%E8%AF%B4%E6%98%8E"><span class="nav-number">2.</span> <span class="nav-text">过程说明</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="houming818"
+      src="/images/logo.jpg">
+  <p class="site-author-name" itemprop="name">houming818</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">15</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">7</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">11</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
+</div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-Hans">
+    <link itemprop="mainEntityOfPage" href="https://www.grepcode.cn/2023/09/blueking002/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/logo.jpg">
+      <meta itemprop="name" content="houming818">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="houming818">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="搭建蓝鲸 | houming818">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          搭建蓝鲸
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">Posted on</span>
+
+      <time title="Created: 2023-09-23 00:00:00" itemprop="dateCreated datePublished" datetime="2023-09-23T00:00:00+08:00">2023-09-23</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">Edited on</span>
+      <time title="Modified: 2023-10-07 14:25:15" itemprop="dateModified" datetime="2023-10-07T14:25:15+08:00">2023-10-07</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">In</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/01-%E8%93%9D%E9%B2%B8%E8%AE%A1%E5%88%92/" itemprop="url" rel="index"><span itemprop="name">01 蓝鲸计划</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><h2 id="参考链接"><a href="#参考链接" class="headerlink" title="参考链接"></a>参考链接</h2><ol>
+<li><p><a target="_blank" rel="noopener" href="https://bk.tencent.com/docs/markdown/ZH/DeploymentGuides/7.1/prepare-bkctrl.md">准备中控机</a></p>
+</li>
+<li><p><a target="_blank" rel="noopener" href="https://bk.tencent.com/docs/markdown/ZH/DeploymentGuides/7.0/install-bkce.md">快速部署基础套餐</a></p>
+</li>
+</ol>
+<h2 id="过程说明"><a href="#过程说明" class="headerlink" title="过程说明"></a>过程说明</h2><p>蓝鲸基础套餐的部署过程大致可以分为 5 个阶段：</p>
+<pre><code>1. 完善配置文件
+2. 部署存储服务
+3. 部署后台服务
+4. 完善 SaaS 运行环境
+5. 部署 SaaS：流程服务和标准运维
+</code></pre>
+<p>详细内容，从参考文件一条条看。</p>
+<p>总结：</p>
+<pre><code class="bash">
+#### 准备工作 ####
+
+$ mkdir -p ~/bin/                      
+$ curl -sSf https://bkopen-1252002024.file.myqcloud.com/ce7/7.1-stable/bkdl-7.1-stable.sh -o ~/bin/bkdl-7.1-stable.sh
+$ chmod +x ~/bin/bkdl-7.1-stable.sh
+$ ~/bin/bkdl-7.1-stable.sh -r latest tools
+
+$ ls $HOME/bkce7.1-install/
+bin
+# 检查下，看看安装目录是不是有文件
+
+$ vim ~/.bashrc
+export PATH=$HOME/bkce7.1-install/bin/:$PATH
+$ source ~/.bashrc
+$ which helm
+/root/bkce7.1-install/bin/helm
+# 确认PATH配置正确
+
+/root/bkce7.1-install
+$ tar xf ./bin/helm-plugin-diff.tgz -C ~/
+# 解压helm插件
+
+$ helm plugin list
+NAME    VERSION DESCRIPTION                           
+diff    3.1.3   Preview helm upgrade changes as a diff
+# 查看helm插件安装是否成功
+
+$ kubectl config set-context --current --namespace=blueking
+# 配置默认命名空间
+
+$ node_ips=$(kubectl get nodes -o jsonpath=&#39;&#123;.items[*].status.addresses[?(@.type==&quot;InternalIP&quot;)].address&#125;&#39;)
+$ test -f /root/.ssh/id_rsa || ssh-keygen -N &#39;&#39; -t rsa -f /root/.ssh/id_rsa  
+# 如果不存在rsa key则创建一个。
+# 开始给发现的ip添加ssh key，期间需要你输入各节点的密码。
+$ for ip in $node_ips; do
+  ssh-copy-id &quot;$ip&quot; || &#123; echo &quot;failed on $ip.&quot;; break; &#125;  # 如果执行失败，则退出
+done
+
+/usr/bin/ssh-copy-id: INFO: Source of key(s) to be installed: &quot;/root/.ssh/id_rsa.pub&quot;
+The authenticity of host &#39;192.168.1.*3 (192.168.1.*3)&#39; cant be established.
+ECDSA key fingerprint is SHA256:**GTPw.
+Are you sure you want to continue connecting (yes/no/[fingerprint])? yes
+/usr/bin/ssh-copy-id: INFO: attempting to log in with the new key(s), to filter out any that are already installed
+
+/usr/bin/ssh-copy-id: WARNING: All keys were skipped because they already exist on the remote system.
+(if you think this is a mistake, you may want to use -f option)
+
+
+#### 开始部署基础套餐 ####
+
+$ ~/bin/bkdl-7.1-stable.sh -ur latest base demo nm_gse_full saas scripts
+
+#### 编辑部署元数据 ####
+
+$ vim ~/bkce7.1-install/blueking/environments/default/values.yaml
+
+编辑域名
+不支持https
+
+编辑
+ingressNginx：
+  hostNetwork: false
+</code></pre>
+<p><img src="/images/blueking002_01.png" alt="Alt text"></p>
+<pre><code class="bash">#### 一键部署之前 ####
+# 由于原来bk7的storage-class有一些问题，这里采用在下的yaml配置storage！
+$ kubectl apply -f https://cdn.grepcode.cn/blueking/local-path-storage.yaml
+NAME                      PROVISIONER             RECLAIMPOLICY   VOLUMEBINDINGMODE      ALLOWVOLUMEEXPANSION   AGE
+local-storage (default)   rancher.io/local-path   Delete          WaitForFirstConsumer   false                  77s
+
+$ kubectl apply -f http://cdn.grepcode.cn/blueking/metrics-server.yaml
+
+#### 一键部署 ####
+BK_DOMAIN=bk.ftjd.org  # 请修改为你分配给蓝鲸平台的主域名
+cd ~/bkce7.1-install/blueking/  # 进入工作目录
+# 检查域名是否符合k8s域名规范，要全部内容匹配才执行脚本，否则提示域名不符合。
+# 执行时，ubuntu会提示yum不存在。检查后，尝试用yum安装的是 bash-completion jq uuid
+# ubuntu安装好后即可。
+scripts/setup_bkce7.sh -i base
+
+# 时间较长，耐心等待...
+
+# 如下命令会重复执行，直到部署完成
+for i in &#123;1..24&#125;; 
+do 
+  /root/bkce7.1-install/blueking/scripts/setup_bkce7.sh -i base
+  if [ &quot;$?&quot; -eq &quot;0&quot; ]; 
+  then 
+    break
+  fi
+done
+</code></pre>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/%E8%BF%90%E7%BB%B4-%E5%BC%80%E5%8F%91-DevOps-%E8%93%9D%E9%B2%B8-ubuntu-blueking-%E6%90%AD%E5%BB%BA/" rel="tag"># 运维 开发 DevOps 蓝鲸 ubuntu blueking 搭建</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2023/09/Kubebuilder002/" rel="prev" title="构建CronJob">
+                  <i class="fa fa-angle-left"></i> 构建CronJob
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2023/09/blueking003/" rel="next" title="蓝鲸重置密码">
+                  蓝鲸重置密码 <i class="fa fa-angle-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2023</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">houming818</span>
+  </div>
+  <div class="powered-by">Powered by <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/" rel="noopener" target="_blank">NexT.Gemini</a>
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="back-to-top" role="button" aria-label="Back to top">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/next-boot.js"></script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-generator-searchdb/1.4.1/search.js" integrity="sha256-1kfA5uHPf65M5cphT2dvymhkuyHPQp5A53EGZOnOLmc=" crossorigin="anonymous"></script>
+<script src="/js/third-party/search/local-search.js"></script>
+
+
+
+
+
+
+
+  
+
+
+
+
+
+</body>
+</html>
